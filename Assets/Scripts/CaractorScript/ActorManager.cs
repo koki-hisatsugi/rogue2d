@@ -9,12 +9,22 @@ using LogManagers;
 // キャラクターの動きをつかさどるクラス → 各部品をまとめた動きを表現
 public class ActorManager : MonoBehaviour
 {
+    [SerializeField] private string _Name;
     [SerializeField] private int _MaxHP;
-
     [SerializeField] private int _HP;
+    [SerializeField] private int _MaxStamina;
+    [SerializeField] private int _Stamina;
     public int GetHP
     {
         get { return _HP; }
+    }
+    public int GetStamina
+    {
+        get { return _Stamina; }
+    }
+    public string GetName
+    {
+        get { return _Name; }
     }
     [SerializeField] private ActorMove _ThisActorMove;
     [SerializeField] private ActorDir _ThisActorDir;
@@ -156,14 +166,24 @@ public class ActorManager : MonoBehaviour
     public void Damage(int damage)
     {
         _HP = _HP - damage;
-        if (_HP < 1)
+        if (_HP < 1 || _HP == 0)
         {
             _HP = 0;
+            ThisAction = ActorAction.isNone;
             // Destroy(gameObject);
         }
         Debug.Log(damage + "ダメージを受けた。");
-        opl.OutputLog(gameObject.name + "は" + damage + "ダメージを受けた。");
-        // Debug.Log(gameObject.name + "のHPが" + _HP + "になった。");
-        // opl.OutputLog(gameObject.name + "のHPが" + _HP + "になった。");
+        opl.OutputLog(gameObject.GetComponent<ActorManager>().GetName + "は" + damage + "ダメージを受けた。");
+    }
+
+    public void StaminaCost(){
+        _Stamina--;
+    }
+
+    public void StaminaCharge(int charge){
+        _Stamina += charge;
+        if(_Stamina > _MaxStamina){
+            _Stamina = _MaxStamina;
+        }
     }
 }

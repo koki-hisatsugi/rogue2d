@@ -136,7 +136,7 @@ public class BoardManager : MonoBehaviour
         _MapFlame.AddComponent(typeof(RectTransform));
         _MapFlame.AddComponent(typeof(Image));
         _MapFlame.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 160);
-        _MapFlame.GetComponent<RectTransform>().localPosition = new Vector2(135, 65);
+        _MapFlame.GetComponent<RectTransform>().localPosition = new Vector2(200, 140);
         _MapFlame.GetComponent<Image>().color = new Color32(137, 137, 137, 100);
 
         _MapElement = new GameObject("Inner");

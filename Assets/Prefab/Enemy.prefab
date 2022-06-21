@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2591270ef3f43824080388c0cdaa8b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Name: "\u30C8\u30E9\u30F3\u30D7\u30DE\u30F3"
   _MaxHP: 20
   _HP: 20
   _ThisActorMove: {fileID: 0}

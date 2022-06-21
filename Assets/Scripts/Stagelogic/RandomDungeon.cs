@@ -11,6 +11,14 @@ public class RandomDungeon
     private List<Area2D> areas;
     private List<Rect2D> rooms;
 
+    // プレイヤーを表現する数値
+    public const int PlayerNum = 2;
+    // エネミーを表現する数値
+    public const int EnemyNum = 5;
+    // 階段を表現する数値
+    public const int StairsNum = 3;
+    // 食べ物(スタミナ関連のアイテム)を表現する数値
+    public const int foodNum = 4;
     /**
     * ダンジョンを作成する
     */
@@ -28,12 +36,16 @@ public class RandomDungeon
         rooms = new List<Rect2D>();
         Area2D area = new Area2D();
         area.outLine = new Rect2D(0, 0, w - 1, h - 1);
+        // 区画を分割する
         Split(area, Random.Range(0, 2) == 0);
+        // 分割した区画に部屋を作成
         CreateRooms();
+        // 部屋同士を結ぶ道を作る
         CreateRoads();
-        createSingleObj(2);
-        createSingleObj(3);
-        createSingleObj(5);
+        // マップ内に一意のオブジェクトを作成する
+        createSingleObj(RandomDungeon.PlayerNum);
+        createSingleObj(RandomDungeon.StairsNum);
+        // createSingleObj(5);
         return data;
     }
 
@@ -115,9 +127,9 @@ public class RandomDungeon
             FillRoom(area.room, "Room" + roomNumber);
             roomNumber++;
             int itemQuantity = Random.Range(0, 4);
-            createMaltiObj(4, itemQuantity, area);
+            createMaltiObj(RandomDungeon.foodNum, itemQuantity, area);
             int enemyQuantity = Random.Range(0, 2);
-            createMaltiObj(5, enemyQuantity, area);
+            createMaltiObj(RandomDungeon.EnemyNum, enemyQuantity, area);
         }
         rooms = tmprooms;
     }
@@ -157,14 +169,10 @@ public class RandomDungeon
             {
                 if (x <= 2)
                 {
-                    Debug.Log(roomRoad);
                     data.Get(x, y1).GetSetRoomName = roomRoad;
-                    Debug.Log(data.Get(x, y1).GetSetRoomName);
                 }
                 else
                 {
-                    
-                    Debug.Log(data.Get(x, y1).GetSetRoomName);
                     data.Get(x, y1).GetSetRoomName = "Road";
                 }
                 data.Get(x, y1).GetSetTileAttribute = MapData2D.TileAttribute.road;
@@ -267,16 +275,28 @@ public class RandomDungeon
     private void CreateRoads()
     {
 
-        for (int i = 0; i < areas.Count - 1; i++)
+        for (int i = 0; i < areas.Count; i++)
         {
-            if (areas[i].outLine.right < areas[i + 1].outLine.left)
-                CreateHorizontalRoad(areas[i], areas[i + 1]);
-            if (areas[i + 1].outLine.right < areas[i].outLine.left)
-                CreateHorizontalRoad(areas[i + 1], areas[i]);
-            if (areas[i].outLine.bottom < areas[i + 1].outLine.top)
-                CreateVerticalRoad(areas[i], areas[i + 1]);
-            if (areas[i + 1].outLine.bottom < areas[i].outLine.top)
-                CreateVerticalRoad(areas[i + 1], areas[i]);
+            if (i != areas.Count -1)
+            {
+                if (areas[i].outLine.right < areas[i + 1].outLine.left)
+                    CreateHorizontalRoad(areas[i], areas[i + 1]);
+                if (areas[i + 1].outLine.right < areas[i].outLine.left)
+                    CreateHorizontalRoad(areas[i + 1], areas[i]);
+                if (areas[i].outLine.bottom < areas[i + 1].outLine.top)
+                    CreateVerticalRoad(areas[i], areas[i + 1]);
+                if (areas[i + 1].outLine.bottom < areas[i].outLine.top)
+                    CreateVerticalRoad(areas[i + 1], areas[i]);
+            }else{
+                if (areas[i].outLine.right < areas[0].outLine.left)
+                    CreateHorizontalRoad(areas[i], areas[0]);
+                if (areas[0].outLine.right < areas[i].outLine.left)
+                    CreateHorizontalRoad(areas[0], areas[i]);
+                if (areas[i].outLine.bottom < areas[0].outLine.top)
+                    CreateVerticalRoad(areas[i], areas[0]);
+                if (areas[0].outLine.bottom < areas[i].outLine.top)
+                    CreateVerticalRoad(areas[0], areas[i]);
+            }
         }
     }
 

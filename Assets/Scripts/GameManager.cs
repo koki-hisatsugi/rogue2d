@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     BoardManager boardManager;
+    // スタミナを消費するまでのターン数
+    private int _StaminaCostTurn;
+    public Text COSTTEXT;
+
+    private Slider _HPbar;
 
     [SerializeField] private GameObject player;
     [SerializeField] private ActorMove _ActorMovePlayer;
@@ -63,9 +68,18 @@ public class GameManager : MonoBehaviour
         boardManager.player = player;
         _thisGameState = GameState.InputStay;
 
+        // コスト表示用のテキストを取得する
+        COSTTEXT = GameObject.Find("FoodText").GetComponent<Text>();
+        COSTTEXT.text = "スタミナ:"+_PlayerActorManager.GetStamina;
+
+        // HPバーのスライダーを取得する
+        _HPbar = GameObject.Find("HPbar").GetComponent<Slider>();
+        _HPbar.value = _PlayerActorManager.GetHP;
+
         InitGame();
         _Enemylist = boardManager.Enemylist;
         _Enemys = boardManager.Enemys;
+        _StaminaCostTurn = 0;
     }
 
     // async(えいしんく)をつける
@@ -256,6 +270,7 @@ public class GameManager : MonoBehaviour
         if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isMove)
         {
             _PlayerActorManager.Action();
+            _StaminaCostTurn++; // スタミナを消費するターンを加算
         }
         // エネミーの移動を行う
         foreach (Transform enemy in _Enemys.transform)
@@ -295,6 +310,7 @@ public class GameManager : MonoBehaviour
         if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isAttack)
         {
             _PlayerActorManager.Action();
+            _StaminaCostTurn++; // スタミナを消費するターンを加算
         }
         // プレイヤーの攻撃アニメーションの終了を待つ
         await UniTask.WaitUntil(() => _PlayerActorManager.isAttack == false);
@@ -340,13 +356,20 @@ public class GameManager : MonoBehaviour
             if (_EnemyActorManager.GetHP <= 0)
             {
                 _a2d.Get((int)enemy.gameObject.transform.position.x, (int)enemy.gameObject.transform.position.y).GetSetMapValue = 0;
-                GameObject.Find("Log").GetComponent<OutPutLog>().OutputLog(enemy.gameObject.name + "は倒れた");
+                GameObject.Find("Log").GetComponent<OutPutLog>().OutputLog(_EnemyActorManager.GetName + "は倒れた");
                 Destroy(enemy.gameObject);
             }
         }
         _Enemylist.Remove(null);
         // プレイヤーの攻撃アニメーションの終了を待つ
         await UniTask.WaitUntil(() => _PlayerActorManager.isAttack == false);
+        // スタミナ消費を判定し、消費するターンならスタミナを消費
+        if (_StaminaCostTurn > 3){
+            _PlayerActorManager.StaminaCost();
+            _StaminaCostTurn = 0;
+        }
+        COSTTEXT.text = "スタミナ:"+_PlayerActorManager.GetStamina;
+        _HPbar.value = _PlayerActorManager.GetHP;
         AutoMapping();
         _thisGameState = GameState.InputStay;
     }
