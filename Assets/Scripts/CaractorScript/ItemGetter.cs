@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemGetter : MonoBehaviour
 {
-    // private Rigidbody2D _ItemGetterRb2d;
-    // void Awake(){
-    //     _ItemGetterRb2d = GetComponent<Rigidbody2D>();
-    // }
-
+    public GameManager gameManager;
+    public bool isOnExit;
     private ActorManager _AM;
-    void Awake(){
+    void Start(){
         _AM = GetComponent<ActorManager>();
+        // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        isOnExit = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -28,6 +25,7 @@ public class ItemGetter : MonoBehaviour
         }
         else if (collision.tag == "Exit")
         {
+            isOnExit = true;
             // gameManager.DungeonSet();
         }
     }

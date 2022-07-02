@@ -17,14 +17,14 @@ public class GameManager : MonoBehaviour
 
     private Slider _HPbar;
 
-    [SerializeField] private GameObject player;
-    [SerializeField] private ActorMove _ActorMovePlayer;
+    [SerializeField] private GameObject _Player;
+    [SerializeField] private ActorMove _PlayerActorMove;
     [SerializeField] private ActorManager _PlayerActorManager;
-    [SerializeField] private GameObject enemy;
-    [SerializeField] private ActorMove _ActorMoveEnemy;
+    [SerializeField] private GameObject _Enemy;
+    [SerializeField] private ActorMove _EnemyActorMove;
     [SerializeField] private ActorManager _EnemyActorManager;
 
-    [SerializeField] private GameObject text;
+    [SerializeField] private GameObject _Text;
 
     [SerializeField] private Array2D _a2d;
     [SerializeField] private Array2D _ma2d;
@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour
         AttackFase,
         EndFase,
         GameEnd,
+
+        PlayerAct,
+        EnemyOperate,
     }
 
     [SerializeField] private GameState _thisGameState;
@@ -62,10 +65,10 @@ public class GameManager : MonoBehaviour
         // マップ作製クラス(BoardManagerを取得)
         boardManager = GetComponent<BoardManager>();
 
-        player = GameObject.Find("Player");
-        _ActorMovePlayer = player.GetComponent<ActorMove>();
-        _PlayerActorManager = player.GetComponent<ActorManager>();
-        boardManager.player = player;
+        _Player = GameObject.Find("Player");
+        _PlayerActorMove = _Player.GetComponent<ActorMove>();
+        _PlayerActorManager = _Player.GetComponent<ActorManager>();
+        boardManager.player = _Player;
         _thisGameState = GameState.InputStay;
 
         // コスト表示用のテキストを取得する
@@ -77,9 +80,6 @@ public class GameManager : MonoBehaviour
         _HPbar.value = _PlayerActorManager.GetHP;
 
         InitGame();
-        _Enemylist = boardManager.Enemylist;
-        _Enemys = boardManager.Enemys;
-        _StaminaCostTurn = 0;
     }
 
     // async(えいしんく)をつける
@@ -97,29 +97,36 @@ public class GameManager : MonoBehaviour
     {
         boardManager.delwall();
         _a2d = boardManager.SetupScene();
+        _Enemylist = boardManager.Enemylist;
+        _Enemys = boardManager.Enemys;
+        _StaminaCostTurn = 0;
         boardManager.dellMap();
         _MapObj = boardManager.mapping(_a2d);
         AutoMapping();
     }
 
+    // オートマッピングのメソッド
     public void AutoMapping()
     {
         Dictionary<string, GameObject> Maps = boardManager.MapDic;
         foreach (string key in Maps.Keys)
         {
+            // マップマスのベース色を設定
             Maps[key].GetComponent<Image>().color = new Color32(255, 255, 255, 150);
         }
 
+        // マップの中のプレイヤーとエネミーを探す
         for (int h = 0; h < _a2d.height; h++)
         {
             for (int w = 0; w < _a2d.width; w++)
             {
+                // マップのプレイヤーかエネミーだった場合、色を変える
                 switch (_a2d.Get(w, h).GetSetMapValue)
                 {
-                    case 2:
+                    case BoardRemote.PlayerNum:
                         Maps[w + ":" + h].GetComponent<Image>().color = new Color32(255, 0, 0, 150);
                         break;
-                    case 5:
+                    case BoardRemote.EnemyNum:
                         Maps[w + ":" + h].GetComponent<Image>().color = new Color32(0, 0, 255, 150);
                         break;
                 }
@@ -129,11 +136,15 @@ public class GameManager : MonoBehaviour
         {
             for (int w = 0; w < _a2d.width; w++)
             {
-                if (_a2d.Get(w, h).GetSetMapValue == 2)
+                // マップのプレイヤーがまだ開いていない部屋に踏み入れた場合、その部屋のマップを開放する
+                if (_a2d.Get(w, h).GetSetMapValue == BoardRemote.PlayerNum)
                 {
+                    // プレイヤーがいる位置のマスの部屋名を取得し、同じ部屋名のマスを開放
                     if (_a2d.Get(w, h).GetSetTileAttribute == MapData2D.TileAttribute.floor)
                     {
+                        // 部屋名のオブジェクトを取得
                         GameObject room = GameObject.Find(_a2d.Get(w, h).GetSetRoomName);
+                        // 子を全てアクティブにする
                         foreach (Transform go in room.transform)
                         {
                             go.gameObject.SetActive(true);
@@ -156,16 +167,16 @@ public class GameManager : MonoBehaviour
             await UniTask.Yield(PlayerLoopTiming.Update);  // Unityのupdate関数と同じフレームで
             switch (_thisGameState)
             {
-                case GameState.InputStay:
+                case GameState.InputStay:         // 入力待ちフェイズ
                     await AllActionDecision();
                     break;
-                case GameState.MoveFase:
-                    await AllMoveExe();
-                    break;
-                case GameState.AttackFase:
+                case GameState.AttackFase:        // 攻撃フェイズ
                     await AllAttackExe();
                     break;
-                case GameState.EndFase:
+                case GameState.MoveFase:          // 動きのフェイズ
+                    await AllMoveExe();
+                    break;
+                case GameState.EndFase:           // 終了処理のフェイズ
                     await EndProcess();
                     break;
             }
@@ -179,22 +190,36 @@ public class GameManager : MonoBehaviour
         // プレイヤーの行動を選定
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
+            // 矢印キーが押された場合、以下の処理を行う
+            // 入力されたことのフラグを立てる
             inputTrue = true;
+            // horizontalとverticalの値を矢印の入力に合わせる。
             int horizontal = (int)Input.GetAxisRaw("Horizontal");
             int vertical = (int)Input.GetAxisRaw("Vertical");
+
+            // 左右のキーが押されていた場合
             if (horizontal != 0)
             {
+                // 左右優先で上下の入力値を0にする　変な方向に動かないように
                 vertical = 0;
             }
+
+            // プレイヤーの移動値と向きを設定する
             _PlayerActorManager.moveHorizontal = horizontal;
             _PlayerActorManager.moveVatical = vertical;
             _PlayerActorManager.setDir();
 
-            if (_a2d.Get((int)player.transform.position.x + horizontal, (int)player.transform.position.y + vertical).GetSetMapValue != 1 &&
-            _a2d.Get((int)player.transform.position.x + horizontal, (int)player.transform.position.y + vertical).GetSetMapValue != 5)
+            // プレイヤーの座標を格納する
+            int _PlayerLocalPosX = (int)_Player.transform.position.x
+            ,_PlayerLocalPosY = (int)_Player.transform.position.y;
+
+            // 進もうとした場所に壁かエネミーがいないか判定
+            if (_a2d.Get(_PlayerLocalPosX + horizontal, _PlayerLocalPosY + vertical).GetSetMapValue != BoardRemote.WallNum &&
+            _a2d.Get(_PlayerLocalPosX + horizontal, _PlayerLocalPosY + vertical).GetSetMapValue != BoardRemote.EnemyNum)
             {
-                _a2d.Get((int)player.transform.position.x, (int)player.transform.position.y).GetSetMapValue = 0;
-                _a2d.Get((int)player.transform.position.x + horizontal, (int)player.transform.position.y + vertical).GetSetMapValue = 2;
+                // 障害物がない場合には、内部マップのプレイヤー位置を変える
+                _a2d.Get(_PlayerLocalPosX, _PlayerLocalPosY).GetSetMapValue = 0;
+                _a2d.Get(_PlayerLocalPosX + horizontal, _PlayerLocalPosY + vertical).GetSetMapValue = BoardRemote.PlayerNum;
             }
             else
             {
@@ -202,6 +227,7 @@ public class GameManager : MonoBehaviour
             }
             _PlayerActorManager.ThisAction = ActorManager.ActorAction.isMove;
         }
+        // 攻撃ボタンを押された場合
         else if (Input.GetKeyDown(KeyCode.B))
         {
             inputTrue = true;
@@ -213,10 +239,15 @@ public class GameManager : MonoBehaviour
         {
             foreach (Transform enemy in _Enemys.transform)
             {
-                _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
+                // エネミーのスクリプトを格納しておく
+                _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
                 _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+                // エネミーのAIをインスタンスする
                 EnemyAI EAI = new EnemyAI();
-                CoordinateXY _CXY = EAI.AstarAlgo((int)enemy.gameObject.transform.position.x, (int)enemy.gameObject.transform.position.y, _a2d);
+                // エネミーの座標を格納する
+                int enemyLocalPosX = (int)enemy.gameObject.transform.position.x
+                ,enemyLocalPosY = (int)enemy.gameObject.transform.position.y;
+                CoordinateXY _CXY = EAI.AstarAlgo(enemyLocalPosX, enemyLocalPosY, _a2d);
                 if (_CXY.GetSetX == 0 && _CXY.GetSetY == 0)
                 {
                     if (enemy.gameObject.transform.position.x > _CXY.GetSetPX)
@@ -242,70 +273,33 @@ public class GameManager : MonoBehaviour
                     _EnemyActorManager.ThisAction = ActorManager.ActorAction.isMove;
                     _EnemyActorManager.moveHorizontal = _CXY.GetSetX - (int)enemy.gameObject.transform.position.x;
                     _EnemyActorManager.moveVatical = _CXY.GetSetY - (int)enemy.gameObject.transform.position.y;
-                    if (_a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != 2
-                    && _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != 1
-                    && _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != 5)
+                    if (_a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != BoardRemote.PlayerNum
+                    && _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != BoardRemote.WallNum
+                    && _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue != BoardRemote.EnemyNum)
                     {
-                        _a2d.Get((int)enemy.gameObject.transform.position.x, (int)enemy.gameObject.transform.position.y).GetSetMapValue = 0; // 自分がいなくなったマスに0をセットする
-                        _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue = 5; // 5をセットする
+                        
+                    int _EnemyLocalPosX = (int)enemy.gameObject.transform.position.x
+                    ,_EnemyLocalPosY = (int)enemy.gameObject.transform.position.y;
+
+                        _a2d.Get(_EnemyLocalPosX, _EnemyLocalPosY).GetSetMapValue = 0; // 自分がいなくなったマスに0をセットする
+                        _a2d.Get(_CXY.GetSetX, _CXY.GetSetY).GetSetMapValue = BoardRemote.EnemyNum; // 5をセットする
                     }
                     else
                     {
                         _EnemyActorManager.ThisAction = ActorManager.ActorAction.isNone;
                     }
-
-                    // _EnemyActorManager.ActorMoving(_CXY.GetSetX - (int)enemy.transform.position.x, _CXY.GetSetY - (int)enemy.transform.position.y);
                 }
             }
         }
 
         _thisGameState = GameState.MoveFase;
-        return;
-
+        // _thisGameState = GameState.AttackFase;
     }
 
-    private async UniTask AllMoveExe()
-    {
-        // プレイヤーの移動を行う
-        if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isMove)
-        {
-            _PlayerActorManager.Action();
-            _StaminaCostTurn++; // スタミナを消費するターンを加算
-        }
-        // エネミーの移動を行う
-        foreach (Transform enemy in _Enemys.transform)
-        {
-            _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
-            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
-            if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isMove)
-            {
-                _EnemyActorManager.Action();
-            }
-        }
-        // プレイヤーとエネミーが移動し終わるのを待つ
-        await UniTask.WaitUntil(() => _ActorMovePlayer.isMoveing == false && _ActorMoveEnemy.isMoveing == false);
-        // プレイヤーのアクションをNoneにする
-        if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isMove)
-        {
-            _PlayerActorManager.ThisAction = ActorManager.ActorAction.isNone;
-        }
-        // 全てのエネミーのアクションをNoneにする
-        foreach (Transform enemy in _Enemys.transform)
-        {
-            _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
-            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
-            if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isMove)
-            {
-                _EnemyActorManager.ThisAction = ActorManager.ActorAction.isNone;
-            }
-        }
-        //AutoMapping();
-        _thisGameState = GameState.AttackFase;
-    }
 
     private async UniTask AllAttackExe()
     {
-        float playerPosX = player.transform.position.x, playerPosY = player.transform.position.y;
+        float playerPosX = _Player.transform.position.x, playerPosY = _Player.transform.position.y;
         // プレイヤーの攻撃を行う
         if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isAttack)
         {
@@ -315,12 +309,12 @@ public class GameManager : MonoBehaviour
         // プレイヤーの攻撃アニメーションの終了を待つ
         await UniTask.WaitUntil(() => _PlayerActorManager.isAttack == false);
         // アニメーションを行った際にポジションが微妙にズレるので強制する
-        player.transform.position = new Vector3((float)Math.Round(playerPosX), (float)Math.Round(playerPosY), 0.0f);
+        _Player.transform.position = new Vector3((float)Math.Round(playerPosX), (float)Math.Round(playerPosY), 0.0f);
         // エネミーの攻撃を行う
         foreach (Transform enemy in _Enemys.transform)
         {
             float EnemyPosX = enemy.transform.position.x, EnemyPosY = enemy.transform.position.y;
-            _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
+            _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
             _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
             if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isAttack)
             {
@@ -331,26 +325,53 @@ public class GameManager : MonoBehaviour
             // アニメーションを行った際にポジションが微妙にズレるので強制する
             enemy.transform.position = new Vector3((float)Math.Round(EnemyPosX), (float)Math.Round(EnemyPosY), 0.0f);
         }
-        // プレイヤーとエネミーが移動し終わるのを待つ(アタックのアニメーションを作ったら待つ処理を入れる↓)
-        // await UniTask.WaitUntil(() => _ActorMovePlayer.isMoveing == false && _ActorMoveEnemy.isMoveing == false);
         // プレイヤーのアクションをNoneにする
         _PlayerActorManager.ThisAction = ActorManager.ActorAction.isNone;
         // 全てのエネミーのアクションをNoneにする
         foreach (Transform enemy in _Enemys.transform)
         {
-            _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
+            _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
             _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
             _EnemyActorManager.ThisAction = ActorManager.ActorAction.isNone;
         }
         _thisGameState = GameState.EndFase;
+        // _thisGameState = GameState.MoveFase;
+    }
+    private async UniTask AllMoveExe()
+    {
+        // プレイヤーの移動を行う
+        if (_PlayerActorManager.ThisAction == ActorManager.ActorAction.isMove)
+        {
+            _PlayerActorManager.Action();
+            _StaminaCostTurn++; // スタミナを消費するターンを加算
+            // プレイヤーの行動をNoneにする
+            _PlayerActorManager.ThisAction = ActorManager.ActorAction.isNone;
+        }
+        // エネミーの移動を行う
+        foreach (Transform enemy in _Enemys.transform)
+        {
+            _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
+            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+            if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isMove)
+            {
+                _EnemyActorManager.Action();
+                // エネミーの行動をNoneにする
+                _EnemyActorManager.ThisAction = ActorManager.ActorAction.isNone;
+            }
+        }
+        // プレイヤーとエネミーが移動し終わるのを待つ
+        await UniTask.WaitUntil(() => _PlayerActorMove.isMoveing == false && _EnemyActorMove.isMoveing == false);
+        //AutoMapping();
+        _thisGameState = GameState.AttackFase;
+        // _thisGameState = GameState.EndFase;
     }
 
     private async UniTask EndProcess()
     {
-        // エネミーの移動を行う
+        // エネミーの死亡判定
         foreach (Transform enemy in _Enemys.transform)
         {
-            _ActorMoveEnemy = enemy.gameObject.GetComponent<ActorMove>();
+            _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
             _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
             Debug.Log(_EnemyActorManager.ThisAction);
             if (_EnemyActorManager.GetHP <= 0)
@@ -371,6 +392,12 @@ public class GameManager : MonoBehaviour
         COSTTEXT.text = "スタミナ:"+_PlayerActorManager.GetStamina;
         _HPbar.value = _PlayerActorManager.GetHP;
         AutoMapping();
+        if(_Player.GetComponent<ItemGetter>() != null){
+            if(_Player.GetComponent<ItemGetter>().isOnExit){
+                _Player.GetComponent<ItemGetter>().isOnExit = false;
+                DungeonSet();
+            }
+        }
         _thisGameState = GameState.InputStay;
     }
 }

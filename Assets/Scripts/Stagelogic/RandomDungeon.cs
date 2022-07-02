@@ -4,21 +4,13 @@ using UnityEngine;
 
 public class RandomDungeon
 {
-    private const int minArea = 8;
+    private const int minArea = 6;
     private const int minRoom = 2;
     private const int margin = 1;
     private Array2D data;
     private List<Area2D> areas;
     private List<Rect2D> rooms;
 
-    // プレイヤーを表現する数値
-    public const int PlayerNum = 2;
-    // エネミーを表現する数値
-    public const int EnemyNum = 5;
-    // 階段を表現する数値
-    public const int StairsNum = 3;
-    // 食べ物(スタミナ関連のアイテム)を表現する数値
-    public const int foodNum = 4;
     /**
     * ダンジョンを作成する
     */
@@ -43,8 +35,8 @@ public class RandomDungeon
         // 部屋同士を結ぶ道を作る
         CreateRoads();
         // マップ内に一意のオブジェクトを作成する
-        createSingleObj(RandomDungeon.PlayerNum);
-        createSingleObj(RandomDungeon.StairsNum);
+        createSingleObj(BoardRemote.PlayerNum);
+        createSingleObj(BoardRemote.StairsNum);
         // createSingleObj(5);
         return data;
     }
@@ -126,10 +118,14 @@ public class RandomDungeon
             tmprooms.Add(area.room);
             FillRoom(area.room, "Room" + roomNumber);
             roomNumber++;
+            // 部屋に配置するアイテムの数を選定 0~3個をランダム
             int itemQuantity = Random.Range(0, 4);
-            createMaltiObj(RandomDungeon.foodNum, itemQuantity, area);
+            // 部屋にアイテムを配置する
+            createMaltiObj(BoardRemote.foodNum, itemQuantity, area);
+            // 部屋に配置するエネミーの数を選定 0~1個をランダム
             int enemyQuantity = Random.Range(0, 2);
-            createMaltiObj(RandomDungeon.EnemyNum, enemyQuantity, area);
+            // 部屋にエネミーを配置する
+            createMaltiObj(BoardRemote.EnemyNum, enemyQuantity, area);
         }
         rooms = tmprooms;
     }

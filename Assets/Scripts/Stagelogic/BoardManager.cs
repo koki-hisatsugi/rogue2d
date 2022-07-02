@@ -22,7 +22,11 @@ public class BoardManager : MonoBehaviour
 
     public int wallMinimum = 5, wallMaximun = 9, foodMinimum = 1, FoodMaximun = 5;
     public int dungeonSize = 50;
-    public List<GameObject> _Walllist = new List<GameObject>();
+    
+    public int dungeonSizeW = 50;
+    
+    public int dungeonSizeH = 50;
+    public List<GameObject> Walllist = new List<GameObject>();
     public List<GameObject> Enemylist = new List<GameObject>();
     [SerializeField] private GameObject _Field;
     public GameObject Enemys;
@@ -87,13 +91,13 @@ public class BoardManager : MonoBehaviour
                 if (a2d.Get(i, j).GetSetMapValue == 1)
                 {
                     GameObject tileChoice = outWallTiles[Random.Range(0, outWallTiles.Length)];
-                    _Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
+                    Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
                 }
                 else
                 {
                     GameObject tileChoice = floorTiles[Random.Range(0, outWallTiles.Length)];
                     //Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity);
-                    _Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
+                    Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
 
                     if (a2d.Get(i, j).GetSetMapValue == 2)
                     {
@@ -104,12 +108,12 @@ public class BoardManager : MonoBehaviour
                     else if (a2d.Get(i, j).GetSetMapValue == 3)
                     {
                         tileChoice = exit;
-                        _Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
+                        Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
                     }
                     else if (a2d.Get(i, j).GetSetMapValue == 4)
                     {
                         tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
-                        _Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
+                        Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
                         a2d.Get(i, j).GetSetMapValue = 0;
                     }
                     else if (a2d.Get(i, j).GetSetMapValue == 5)
@@ -191,7 +195,8 @@ public class BoardManager : MonoBehaviour
     public void delwall()
     {
         Destroy(_Field);
-        _Walllist.Clear();
+        Walllist.Clear();
+        Enemylist.Clear();
     }
 
     public void dellMap()
