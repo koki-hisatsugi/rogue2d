@@ -171,6 +171,8 @@ MonoBehaviour:
   _Name: "\u30C8\u30E9\u30F3\u30D7\u30DE\u30F3"
   _MaxHP: 20
   _HP: 20
+  _MaxStamina: 0
+  _Stamina: 0
   _ThisActorMove: {fileID: 0}
   _ThisActorDir: {fileID: 0}
   _ThisActorAttack: {fileID: 0}
