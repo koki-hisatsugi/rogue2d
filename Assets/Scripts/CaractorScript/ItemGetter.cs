@@ -29,4 +29,12 @@ public class ItemGetter : MonoBehaviour
             // gameManager.DungeonSet();
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision){
+        if (collision.tag == "Exit")
+        {
+            isOnExit = false;
+            // gameManager.DungeonSet();
+        }
+    }
 }

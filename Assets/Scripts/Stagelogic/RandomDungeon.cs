@@ -10,6 +10,11 @@ public class RandomDungeon
     private Array2D data;
     private List<Area2D> areas;
     private List<Rect2D> rooms;
+    private List<GameObject> roomMasks;
+    public List<GameObject> Get_roomMasks
+    {
+        get { return roomMasks; }
+    }
 
     /**
     * ダンジョンを作成する
@@ -26,6 +31,7 @@ public class RandomDungeon
         }
         areas = new List<Area2D>();
         rooms = new List<Rect2D>();
+        roomMasks = new List<GameObject>();
         Area2D area = new Area2D();
         area.outLine = new Rect2D(0, 0, w - 1, h - 1);
         // 区画を分割する
@@ -49,13 +55,16 @@ public class RandomDungeon
         Rect2D rect1, rect2;
         if (isVertical)
         {
-            if (baseArea.outLine.left + minArea >= baseArea.outLine.right - minArea)
+            // 垂直フラグがTrueの場合、縦に分割する
+            if (baseArea.outLine.left + minArea > baseArea.outLine.right - minArea)
             {
+                // 区画の大きさが最少を下回っている場合、LISTに詰めて処理を終了する
                 areas.Add(baseArea);
                 return;
             }
+            // 分割点を計算する(乱数)
             int p = Random.Range(baseArea.outLine.left + minArea, baseArea.outLine.right - minArea);
-            rect1 = new Rect2D(baseArea.outLine.left, baseArea.outLine.top, p, baseArea.outLine.bottom);
+            rect1 = new Rect2D(baseArea.outLine.left, baseArea.outLine.top, p - 1, baseArea.outLine.bottom);
             rect2 = new Rect2D(p + 1, baseArea.outLine.top, baseArea.outLine.right, baseArea.outLine.bottom);
             if ((rect1.width < rect2.width) ||
                 (rect1.width == rect2.width && Random.Range(0, 2) == 0))
@@ -67,13 +76,13 @@ public class RandomDungeon
         }
         else
         {
-            if (baseArea.outLine.top + minArea >= baseArea.outLine.bottom - minArea)
+            if (baseArea.outLine.top + minArea > baseArea.outLine.bottom - minArea)
             {
                 areas.Add(baseArea);
                 return;
             }
             int p = Random.Range(baseArea.outLine.top + minArea, baseArea.outLine.bottom - minArea);
-            rect1 = new Rect2D(baseArea.outLine.left, baseArea.outLine.top, baseArea.outLine.right, p);
+            rect1 = new Rect2D(baseArea.outLine.left, baseArea.outLine.top, baseArea.outLine.right, p - 1);
             rect2 = new Rect2D(baseArea.outLine.left, p + 1, baseArea.outLine.right, baseArea.outLine.bottom);
             if ((rect1.height < rect2.height) ||
                 (rect1.height == rect2.height && Random.Range(0, 2) == 0))
@@ -102,8 +111,8 @@ public class RandomDungeon
         {
             int aw = area.outLine.width - margin * 2;
             int ah = area.outLine.height - margin * 2;
-            int minW = aw / Random.Range(2, 6);
-            int minH = ah / Random.Range(2, 6);
+            int minW = aw / Random.Range(3, 6);
+            int minH = ah / Random.Range(3, 6);
             int width = Random.Range(minW, aw);
             int height = Random.Range(minH, ah);
             int rw = aw - width;
@@ -117,6 +126,7 @@ public class RandomDungeon
             area.room = new Rect2D(left, top, right, bottom);
             tmprooms.Add(area.room);
             FillRoom(area.room, "Room" + roomNumber);
+            roomMasks.Add(CreateMask(area.room, "Mask_Room" + roomNumber, 2));
             roomNumber++;
             // 部屋に配置するアイテムの数を選定 0~3個をランダム
             int itemQuantity = Random.Range(0, 4);
@@ -128,6 +138,25 @@ public class RandomDungeon
             createMaltiObj(BoardRemote.EnemyNum, enemyQuantity, area);
         }
         rooms = tmprooms;
+    }
+
+    private GameObject CreateMask(Rect2D room, string roomname, float margin){
+        GameObject result = new GameObject();
+        result.name = roomname;
+        result.AddComponent(typeof(SpriteMask));
+        result.GetComponent<SpriteMask>().sprite = Resources.Load<Sprite>("MaskSquare");
+
+        float width = room.right - room.left;
+        float height = room.bottom - room.top;
+        float xpos = (width/2) + room.left;
+        float ypos = (height/2) + room.top;
+
+        result.transform.localScale = new Vector3(width + margin,height + margin,1);
+        result.transform.position = new Vector3(xpos,ypos,1);
+
+        result.GetComponent<SpriteMask>().enabled = false;
+
+        return result;
     }
 
     /**
@@ -153,19 +182,20 @@ public class RandomDungeon
     {
         int y1 = Random.Range(area1.room.top, area1.room.bottom);
         int y2 = Random.Range(area2.room.top, area2.room.bottom);
-        string roomRoad = null;
-        for (int x = area1.room.right; x < area1.outLine.right; x++)
+        string roomRoad1 = data.Get(area1.room.right, y1).GetSetRoomName;
+        string roomRoad2 = data.Get(area2.room.left, y2).GetSetRoomName;
+        for (int x = area1.room.right +1; x < area1.outLine.right + 1; x++)
         {
             data.Get(x, y1).GetSetMapValue = 0;
             if (data.Get(x, y1).GetSetTileAttribute == MapData2D.TileAttribute.floor)
             {
-                roomRoad = data.Get(x, y1).GetSetRoomName;
+                // roomRoad1 = data.Get(x, y1).GetSetRoomName;
             }
             else
             {
-                if (x <= 2)
+                if (x == area1.room.right+1)
                 {
-                    data.Get(x, y1).GetSetRoomName = roomRoad;
+                    data.Get(x, y1).GetSetRoomName = roomRoad1;
                 }
                 else
                 {
@@ -174,19 +204,19 @@ public class RandomDungeon
                 data.Get(x, y1).GetSetTileAttribute = MapData2D.TileAttribute.road;
             }
         }
-        for (int x = area2.outLine.left; x < area2.room.left; x++)
+        for (int x = area2.outLine.left-1; x < area2.room.left; x++)
         {
             data.Get(x, y2).GetSetMapValue = 0;
             if (
             data.Get(x, y2).GetSetTileAttribute == MapData2D.TileAttribute.floor)
             {
-                roomRoad = data.Get(x, y1).GetSetRoomName;
+                // roomRoad2 = data.Get(x, y1).GetSetRoomName;
             }
             else
             {
-                if (x <= 2)
+                if (x == area2.room.left-1)
                 {
-                    data.Get(x, y2).GetSetRoomName = roomRoad;
+                    data.Get(x, y2).GetSetRoomName = roomRoad2;
                 }
                 else
                 {
@@ -197,11 +227,11 @@ public class RandomDungeon
         }
         for (int y = Mathf.Min(y1, y2), end = Mathf.Max(y1, y2); y <= end; y++)
         {
-            data.Get(area1.outLine.right, y).GetSetMapValue = 0;
-            if (data.Get(area1.outLine.right, y).GetSetTileAttribute != MapData2D.TileAttribute.floor)
+            data.Get(area1.outLine.right+1, y).GetSetMapValue = 0;
+            if (data.Get(area1.outLine.right+1, y).GetSetTileAttribute != MapData2D.TileAttribute.floor)
             {
-                data.Get(area1.outLine.right, y).GetSetRoomName = "Road";
-                data.Get(area1.outLine.right, y).GetSetTileAttribute = MapData2D.TileAttribute.road;
+                data.Get(area1.outLine.right+1, y).GetSetRoomName = "Road";
+                data.Get(area1.outLine.right+1, y).GetSetTileAttribute = MapData2D.TileAttribute.road;
             }
         }
     }
@@ -213,19 +243,20 @@ public class RandomDungeon
     {
         int x1 = Random.Range(area1.room.left, area1.room.right);
         int x2 = Random.Range(area2.room.left, area2.room.right);
-        string roomRoad = null;
-        for (int y = area1.room.bottom; y < area1.outLine.bottom; y++)
+        string roomRoad1 = data.Get(x1, area1.room.bottom).GetSetRoomName;
+        string roomRoad2 = data.Get(x2, area2.room.top).GetSetRoomName;
+        for (int y = area1.room.bottom +1; y < area1.outLine.bottom + 1; y++)
         {
             data.Get(x1, y).GetSetMapValue = 0;
             if (data.Get(x1, y).GetSetTileAttribute == MapData2D.TileAttribute.floor)
             {
-                roomRoad = data.Get(x1, y).GetSetRoomName;
+                // roomRoad1 = data.Get(x1, y).GetSetRoomName;
             }
             else
             {
-                if (y <= 2)
+                if (y == area1.room.bottom+1)
                 {
-                    data.Get(x1, y).GetSetRoomName = roomRoad;
+                    data.Get(x1, y).GetSetRoomName = roomRoad1;
                 }
                 else
                 {
@@ -234,18 +265,18 @@ public class RandomDungeon
                 data.Get(x1, y).GetSetTileAttribute = MapData2D.TileAttribute.road;
             }
         }
-        for (int y = area2.outLine.top; y < area2.room.top; y++)
+        for (int y = area2.outLine.top - 1; y < area2.room.top; y++)
         {
             data.Get(x2, y).GetSetMapValue = 0;
             if (data.Get(x2, y).GetSetTileAttribute == MapData2D.TileAttribute.floor)
             {
-                roomRoad = data.Get(x2, y).GetSetRoomName;
+                // roomRoad2 = data.Get(x2, y).GetSetRoomName;
             }
             else
             {
-                if (y <= 2)
+                if (y == area2.room.top-1)
                 {
-                    data.Get(x2, y).GetSetRoomName = roomRoad;
+                    data.Get(x2, y).GetSetRoomName = roomRoad2;
                 }
                 else
                 {
@@ -256,11 +287,11 @@ public class RandomDungeon
         }
         for (int x = Mathf.Min(x1, x2), end = Mathf.Max(x1, x2); x <= end; x++)
         {
-            data.Get(x, area1.outLine.bottom).GetSetMapValue = 0;
-            if (data.Get(x, area1.outLine.bottom).GetSetTileAttribute != MapData2D.TileAttribute.floor)
+            data.Get(x, area1.outLine.bottom+1).GetSetMapValue = 0;
+            if (data.Get(x, area1.outLine.bottom+1).GetSetTileAttribute != MapData2D.TileAttribute.floor)
             {
-                data.Get(x, area1.outLine.bottom).GetSetRoomName = "Road";
-                data.Get(x, area1.outLine.bottom).GetSetTileAttribute = MapData2D.TileAttribute.road;
+                data.Get(x, area1.outLine.bottom+1).GetSetRoomName = "Road";
+                data.Get(x, area1.outLine.bottom+1).GetSetTileAttribute = MapData2D.TileAttribute.road;
             }
         }
     }
@@ -268,6 +299,34 @@ public class RandomDungeon
     /**
     * 道を作成
     */
+    // private void CreateRoads()
+    // {
+
+    //     for (int i = 0; i < areas.Count; i++)
+    //     {
+    //         if (i != areas.Count -1)
+    //         {
+    //             if (areas[i].outLine.right < areas[i + 1].outLine.left)
+    //                 CreateHorizontalRoad(areas[i], areas[i + 1]);
+    //             if (areas[i + 1].outLine.right < areas[i].outLine.left)
+    //                 CreateHorizontalRoad(areas[i + 1], areas[i]);
+    //             if (areas[i].outLine.bottom < areas[i + 1].outLine.top)
+    //                 CreateVerticalRoad(areas[i], areas[i + 1]);
+    //             if (areas[i + 1].outLine.bottom < areas[i].outLine.top)
+    //                 CreateVerticalRoad(areas[i + 1], areas[i]);
+    //         }else{
+    //             if (areas[i].outLine.right < areas[0].outLine.left)
+    //                 CreateHorizontalRoad(areas[i], areas[0]);
+    //             if (areas[0].outLine.right < areas[i].outLine.left)
+    //                 CreateHorizontalRoad(areas[0], areas[i]);
+    //             if (areas[i].outLine.bottom < areas[0].outLine.top)
+    //                 CreateVerticalRoad(areas[i], areas[0]);
+    //             if (areas[0].outLine.bottom < areas[i].outLine.top)
+    //                 CreateVerticalRoad(areas[0], areas[i]);
+    //         }
+    //     }
+    // }
+
     private void CreateRoads()
     {
 
@@ -283,19 +342,28 @@ public class RandomDungeon
                     CreateVerticalRoad(areas[i], areas[i + 1]);
                 if (areas[i + 1].outLine.bottom < areas[i].outLine.top)
                     CreateVerticalRoad(areas[i + 1], areas[i]);
-            }else{
-                if (areas[i].outLine.right < areas[0].outLine.left)
-                    CreateHorizontalRoad(areas[i], areas[0]);
-                if (areas[0].outLine.right < areas[i].outLine.left)
-                    CreateHorizontalRoad(areas[0], areas[i]);
-                if (areas[i].outLine.bottom < areas[0].outLine.top)
-                    CreateVerticalRoad(areas[i], areas[0]);
-                if (areas[0].outLine.bottom < areas[i].outLine.top)
-                    CreateVerticalRoad(areas[0], areas[i]);
+            }
+
+            if(Random.Range(0,10) < 6){
+                if (i < areas.Count -2)
+                {
+                    if((areas[i].outLine.right+1 == areas[i + 2].outLine.left-1)
+                    ||(areas[i + 2].outLine.right+1 == areas[i].outLine.left-1)
+                    ||(areas[i].outLine.bottom+1 == areas[i + 2].outLine.top-1)
+                    ||(areas[i + 2].outLine.bottom+1 == areas[i].outLine.top-1)){
+                        if (areas[i].outLine.right < areas[i + 2].outLine.left)
+                            CreateHorizontalRoad(areas[i], areas[i + 2]);
+                        if (areas[i + 2].outLine.right < areas[i].outLine.left)
+                            CreateHorizontalRoad(areas[i + 2], areas[i]);
+                        if (areas[i].outLine.bottom < areas[i + 2].outLine.top)
+                            CreateVerticalRoad(areas[i], areas[i + 2]);
+                        if (areas[i + 2].outLine.bottom < areas[i].outLine.top)
+                            CreateVerticalRoad(areas[i + 2], areas[i]);
+                    }
+                }
             }
         }
     }
-
     public void createSingleObj(int num)
     {
         while (true)
@@ -305,7 +373,11 @@ public class RandomDungeon
             int institutionY = Random.Range(areas[institutionRoom].room.top, areas[institutionRoom].room.bottom + 1);
             if (data.Get(institutionX, institutionY).GetSetMapValue == 0)
             {
-                data.Get(institutionX, institutionY).GetSetMapValue = num;
+                if(num == BoardRemote.StairsNum){
+                    data.Get(institutionX, institutionY).GetSetMapValue = num;
+                }else{
+                    data.Get(institutionX, institutionY).GetSetMapOnActor = num;
+                }
                 return;
             }
         }
@@ -321,7 +393,11 @@ public class RandomDungeon
                 int institutionY = Random.Range(institutionArea.room.top, institutionArea.room.bottom + 1);
                 if (data.Get(institutionX, institutionY).GetSetMapValue == 0)
                 {
-                    data.Get(institutionX, institutionY).GetSetMapValue = num;
+                    if(num == BoardRemote.StairsNum || num == BoardRemote.foodNum ){
+                        data.Get(institutionX, institutionY).GetSetMapValue = num;
+                    }else{
+                        data.Get(institutionX, institutionY).GetSetMapOnActor = num;
+                    }
                     break;
                 }
             }

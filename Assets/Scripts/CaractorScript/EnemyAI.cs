@@ -82,6 +82,15 @@ public class EnemyAI : MonoBehaviour
         // 返却用の座標格納クラス
         CoordinateXY resultCXY = new CoordinateXY(0,0,0,0);
         PlayerSearch(baseA2d, resultCXY);
+        // プレイヤーの位置がエネミーから離れすぎている場合は経路の判別を行わない
+        float dX = (float)Mathf.Abs(Mathf.Abs(resultCXY.GetSetPX)-Mathf.Abs(startX));
+        float dY = (float)Mathf.Abs(Mathf.Abs(resultCXY.GetSetPY)-Mathf.Abs(startY));
+        if(dX+dY > 50){
+            resultCXY.GetSetX = 2;
+            resultCXY.GetSetY = 2;
+            return resultCXY;
+        }
+
         // ゴール到達判定用のノード
         Node endNode = new Node(resultCXY.GetSetPX,resultCXY.GetSetPY,resultCXY.GetSetPX,resultCXY.GetSetPY,0);
         endNode.setStatus(0);
@@ -138,7 +147,7 @@ public class EnemyAI : MonoBehaviour
 
     private void openFourDir(Node baseNode, Array2D baseA2d, int _pP){
         // 上
-        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY + 1).GetSetMapValue !=1){
+        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY + 1).GetSetMapValue != BoardRemote.WallNum){
             Node upNode = new Node(baseNode.GetSetX,baseNode.GetSetY + 1,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             upNode.GetSetPP = _pP;
             upNode.setStatus(1);
@@ -156,7 +165,7 @@ public class EnemyAI : MonoBehaviour
         }
         // UP_IF_END:
         // 下
-        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY - 1).GetSetMapValue !=1){
+        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY - 1).GetSetMapValue != BoardRemote.WallNum){
             Node downNode = new Node(baseNode.GetSetX,baseNode.GetSetY - 1,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             downNode.GetSetPP = _pP;
             downNode.setStatus(1);
@@ -174,7 +183,7 @@ public class EnemyAI : MonoBehaviour
         }
         // DOWN_IF_END:
         // 右
-        if(baseA2d.Get(baseNode.GetSetX + 1,baseNode.GetSetY).GetSetMapValue !=1){
+        if(baseA2d.Get(baseNode.GetSetX + 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum){
             Node rightNode = new Node(baseNode.GetSetX + 1,baseNode.GetSetY,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             rightNode.GetSetPP = _pP;
             rightNode.setStatus(1);
@@ -192,7 +201,7 @@ public class EnemyAI : MonoBehaviour
         }
         // RIGHT_IF_END:
         // 左
-        if(baseA2d.Get(baseNode.GetSetX - 1,baseNode.GetSetY).GetSetMapValue !=1){
+        if(baseA2d.Get(baseNode.GetSetX - 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum){
             Node leftNode = new Node(baseNode.GetSetX - 1,baseNode.GetSetY,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             leftNode.GetSetPP = _pP;
             leftNode.setStatus(1);
@@ -212,7 +221,7 @@ public class EnemyAI : MonoBehaviour
     private void PlayerSearch(Array2D baseA2d, CoordinateXY CXY){
         for(int z = 0; z < baseA2d.height; z++){
             for(int x = 0; x < baseA2d.width; x++){
-                if(baseA2d.Get(x,z).GetSetMapValue == 2){
+                if(baseA2d.Get(x,z).GetSetMapOnActor == BoardRemote.PlayerNum){
                     CXY.GetSetPX = x;
                     CXY.GetSetPY = z;
                     // playerPosX = x;

@@ -1,5 +1,7 @@
 public class BoardRemote
 {
+    // 床を表現する数値
+    public const int FloorNum = 0;
     // 壁を表現する数値
     public const int WallNum = 1;
     // プレイヤーを表現する数値

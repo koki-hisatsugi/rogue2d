@@ -14,6 +14,17 @@ public class ActorManager : MonoBehaviour
     [SerializeField] private int _HP;
     [SerializeField] private int _MaxStamina;
     [SerializeField] private int _Stamina;
+    [SerializeField] private int _ActorPosX,_ActorPosY;
+    public int GetSet_ActorPosX
+    {
+        get { return _ActorPosX; }
+        set { _ActorPosX = value; }
+    }
+    public int GetSet_ActorPosY
+    {
+        get { return _ActorPosY; }
+        set { _ActorPosY = value; }
+    }
     public int GetHP
     {
         get { return _HP; }

@@ -2,6 +2,7 @@
 public class MapData2D
 {
     [UnityEngine.SerializeField] private int _MapValue;
+    [UnityEngine.SerializeField] private int _MapOnActor;
     [UnityEngine.SerializeField] private string _RoomName;
     public enum TileAttribute
     {
@@ -22,6 +23,12 @@ public class MapData2D
     {
         get { return _MapValue; }
         set { _MapValue = value; }
+    }
+
+    public int GetSetMapOnActor
+    {
+        get { return _MapOnActor; }
+        set { _MapOnActor = value; }
     }
 
     public string GetSetRoomName

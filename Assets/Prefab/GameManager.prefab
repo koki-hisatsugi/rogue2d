@@ -44,13 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f4aecdd837114d9dccc550039ef72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  _ActorMovePlayer: {fileID: 0}
+  _Player: {fileID: 0}
+  _PlayerActorMove: {fileID: 0}
   _PlayerActorManager: {fileID: 0}
-  enemy: {fileID: 0}
-  _ActorMoveEnemy: {fileID: 0}
+  _Enemy: {fileID: 0}
+  _EnemyActorMove: {fileID: 0}
   _EnemyActorManager: {fileID: 0}
-  text: {fileID: 0}
+  _Text: {fileID: 0}
   _a2d:
     width: 0
     height: 0
@@ -59,6 +59,11 @@ MonoBehaviour:
     width: 0
     height: 0
     data: []
+  _ConfirmPanel_NextFloor: {fileID: 0}
+  _OKButton_NextFloor: {fileID: 0}
+  _NOButton_NextFloor: {fileID: 0}
+  _OK_NextFloor: {fileID: 0}
+  _NO_NextFloor: {fileID: 0}
   _thisGameState: 0
   _Enemys: {fileID: 0}
   _MapObj: []
@@ -111,8 +116,10 @@ MonoBehaviour:
   wallMaximun: 9
   foodMinimum: 1
   FoodMaximun: 5
-  dungeonSize: 32
-  _Walllist: []
+  dungeonSize: 50
+  dungeonSizeW: 50
+  dungeonSizeH: 50
+  Walllist: []
   Enemylist: []
   _Field: {fileID: 0}
   Enemys: {fileID: 0}

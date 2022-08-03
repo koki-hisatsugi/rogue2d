@@ -20,8 +20,8 @@ public class BoardManager : MonoBehaviour
 
     [SerializeField] private GameObject _MainCamera;
 
-    public int wallMinimum = 5, wallMaximun = 9, foodMinimum = 1, FoodMaximun = 5;
-    public int dungeonSize = 50;
+    public int wallMinimum = 7, wallMaximun = 10, foodMinimum = 1, FoodMaximun = 5;
+    public int dungeonSize = 80;
     
     public int dungeonSizeW = 50;
     
@@ -32,6 +32,8 @@ public class BoardManager : MonoBehaviour
     public GameObject Enemys;
     [SerializeField] private GameObject _MapFlame;
     [SerializeField] private GameObject _MapElement;
+
+    public List<GameObject> _RoomMasks;
 
     public Dictionary<string,GameObject> MapDic;
 
@@ -75,7 +77,9 @@ public class BoardManager : MonoBehaviour
         _MainCamera = GameObject.Find("Main Camera");
         //LayoutObjectRandom(wallTiles, wallMinimum, wallMaximun);
         //LayoutObjectRandom(foodTiles, foodMinimum, FoodMaximun);
-        Array2D a2d = new RandomDungeon().Create(dungeonSize, dungeonSize);
+        RandomDungeon rDungeon = new RandomDungeon();
+        Array2D a2d = rDungeon.Create(dungeonSize, dungeonSize);
+        _RoomMasks = rDungeon.Get_roomMasks;
         // test = GameObject.Find("Image");
         // Destroy(test2.transform);
         _Field = new GameObject("Field");
@@ -88,7 +92,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < dungeonSize; j++)
             {
                 //Debug.Log("i=" + i + "/j="+j+":" + a2d.Get(i, j));
-                if (a2d.Get(i, j).GetSetMapValue == 1)
+                if (a2d.Get(i, j).GetSetMapValue == BoardRemote.WallNum)
                 {
                     GameObject tileChoice = outWallTiles[Random.Range(0, outWallTiles.Length)];
                     Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
@@ -99,27 +103,35 @@ public class BoardManager : MonoBehaviour
                     //Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity);
                     Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
 
-                    if (a2d.Get(i, j).GetSetMapValue == 2)
+                    if (a2d.Get(i, j).GetSetMapOnActor == BoardRemote.PlayerNum)
                     {
                         player.transform.position = new Vector3(i, j, 0);
                         _MainCamera.transform.position = new Vector3(i, j, -10);
+                        ActorManager player_ActorManager = player.GetComponent<ActorManager>();
+                        player_ActorManager.GetSet_ActorPosX = i;
+                        player_ActorManager.GetSet_ActorPosY = j;
                         // a2d.Set(i, j, 0);
                     }
-                    else if (a2d.Get(i, j).GetSetMapValue == 3)
+                    else if (a2d.Get(i, j).GetSetMapValue == BoardRemote.StairsNum)
                     {
                         tileChoice = exit;
                         Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
                     }
-                    else if (a2d.Get(i, j).GetSetMapValue == 4)
+                    else if (a2d.Get(i, j).GetSetMapValue == BoardRemote.foodNum)
                     {
                         tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
                         Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
-                        a2d.Get(i, j).GetSetMapValue = 0;
+                        // a2d.Get(i, j).GetSetMapValue = 0;
+                        // a2d.Get(i, j).GetSetMapOnActor = BoardRemote.foodNum;
                     }
-                    else if (a2d.Get(i, j).GetSetMapValue == 5)
+                    else if (a2d.Get(i, j).GetSetMapOnActor == BoardRemote.EnemyNum)
                     {
                         tileChoice = enemyTiles[Random.Range(0, enemyTiles.Length)];
-                        Enemylist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, Enemys.transform));
+                        GameObject tmpEnemy = Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, Enemys.transform);
+                        ActorManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<ActorManager>();
+                        tmpEnemy_ActorManager.GetSet_ActorPosX = i;
+                        tmpEnemy_ActorManager.GetSet_ActorPosY = j;
+                        Enemylist.Add(tmpEnemy);
                         // enemy.transform.position = new Vector3(i, j, 0);
                     }
                 }
@@ -134,50 +146,42 @@ public class BoardManager : MonoBehaviour
         MapDic = new Dictionary<string, GameObject>();
         List<GameObject> resultMapObj = new List<GameObject>();
         GameObject _canvas = GameObject.Find("Canvas");
-        _MapFlame = new GameObject("Image");
-        _MapFlame.transform.parent = _canvas.transform;
-        _MapFlame.AddComponent(typeof(CanvasRenderer));
-        _MapFlame.AddComponent(typeof(RectTransform));
-        _MapFlame.AddComponent(typeof(Image));
-        _MapFlame.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 160);
-        _MapFlame.GetComponent<RectTransform>().localPosition = new Vector2(200, 140);
-        _MapFlame.GetComponent<Image>().color = new Color32(137, 137, 137, 100);
+
+        _MapFlame = _canvas.transform.Find("MapFlame").gameObject;
+        _MapFlame.GetComponent<Image>().color = new Color32(0, 0, 0, 0); // 無色
 
         _MapElement = new GameObject("Inner");
         _MapElement.AddComponent(typeof(CanvasRenderer));
         _MapElement.AddComponent(typeof(RectTransform));
         _MapElement.AddComponent(typeof(Image));
-        // _MapElement.AddComponent(typeof(MapDataObj));
         _MapElement.GetComponent<RectTransform>().sizeDelta = new Vector2(5, 5);
-        _MapElement.GetComponent<Image>().color = new Color32(255, 255, 255, 150);
+        _MapElement.GetComponent<Image>().color = new Color32(255, 255, 255, 90);
 
         for (int i = 0; i < dungeonSize; i++)
         {
             for (int j = 0; j < dungeonSize; j++)
             {
-                //Debug.Log("i=" + i + "/j="+j+":" + a2d.Get(i, j));
                 if (a2d.Get(i, j).GetSetMapValue != 1)
                 {
                     GameObject tInner = Instantiate(_MapElement, new Vector3(0, 0, 0), Quaternion.identity, _MapFlame.transform);
-                    tInner.GetComponent<RectTransform>().localPosition = new Vector3((i * 5) - 77.5f, (j * 5) - 77.5f, 0);
+                    // サイズを5倍にしているので、配置する位置も5を掛ける
+                    // X座標は、-100して調整している　右によりすぎてしまうため
+                    tInner.GetComponent<RectTransform>().localPosition = new Vector3((i*5)-100, j*5, 0);
                     if(!rooms.ContainsKey(a2d.Get(i, j).GetSetRoomName)){
                         GameObject troom = new GameObject(a2d.Get(i, j).GetSetRoomName);
+                        troom.AddComponent(typeof(RectTransform));
                         troom.transform.parent = _MapFlame.transform;
                         rooms.Add(a2d.Get(i, j).GetSetRoomName, troom);
                     }
-                    if (a2d.Get(i, j).GetSetMapValue == 2)
-                    {
-                        tInner.GetComponent<Image>().color = new Color32(255, 0, 0, 150);
+
+                    if (a2d.Get(i, j).GetSetMapValue == BoardRemote.StairsNum){
+                        tInner.GetComponent<Image>().color = new Color32(14, 209, 69 , 90);
                     }
-                    else if (a2d.Get(i, j).GetSetMapValue == 3)
-                    {
-                    }
-                    else if (a2d.Get(i, j).GetSetMapValue == 4)
-                    {
-                    }
-                    else if (a2d.Get(i, j).GetSetMapValue == 5)
-                    {
-                        tInner.GetComponent<Image>().color = new Color32(0, 0, 255, 150);
+
+                    if (a2d.Get(i, j).GetSetMapOnActor == BoardRemote.PlayerNum){
+                        tInner.GetComponent<Image>().color = new Color32(255, 0, 0, 90);
+                    } else if (a2d.Get(i, j).GetSetMapOnActor == BoardRemote.EnemyNum){
+                        tInner.GetComponent<Image>().color = new Color32(0, 0, 255, 90);
                     }
 
                     tInner.transform.parent = rooms[a2d.Get(i, j).GetSetRoomName].transform;
@@ -197,10 +201,21 @@ public class BoardManager : MonoBehaviour
         Destroy(_Field);
         Walllist.Clear();
         Enemylist.Clear();
+        if(_RoomMasks != null){
+            foreach(GameObject mask in _RoomMasks){
+                Destroy(mask);
+            }
+        }
     }
 
     public void dellMap()
     {
-        Destroy(_MapFlame);
+        if(_MapFlame!=null){
+            // _MapFlameがまだセットされていない場合があるので
+            foreach(Transform child in _MapFlame.transform){
+                Destroy(child.gameObject);
+            }
+        }
+        // Destroy(_MapFlame);
     }
 }
