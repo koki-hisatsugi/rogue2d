@@ -1,0 +1,616 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a139ac655023848b67c553c45d3ebe, type: 3}
+  m_Name: PlayerStatusDB
+  m_EditorClassIdentifier: 
+  name: "\u30A2\u30EA\u30B9"
+  list:
+  - level: 1
+    maxHp: 20
+    maxStamina: 20
+    nextExp: 30
+    atk: 5
+    def: 2
+  - level: 2
+    maxHp: 40
+    maxStamina: 40
+    nextExp: 60
+    atk: 10
+    def: 4
+  - level: 3
+    maxHp: 60
+    maxStamina: 60
+    nextExp: 90
+    atk: 15
+    def: 6
+  - level: 4
+    maxHp: 80
+    maxStamina: 80
+    nextExp: 120
+    atk: 20
+    def: 8
+  - level: 5
+    maxHp: 100
+    maxStamina: 100
+    nextExp: 150
+    atk: 25
+    def: 10
+  - level: 6
+    maxHp: 120
+    maxStamina: 120
+    nextExp: 180
+    atk: 30
+    def: 12
+  - level: 7
+    maxHp: 140
+    maxStamina: 140
+    nextExp: 210
+    atk: 35
+    def: 14
+  - level: 8
+    maxHp: 160
+    maxStamina: 160
+    nextExp: 240
+    atk: 40
+    def: 16
+  - level: 9
+    maxHp: 180
+    maxStamina: 180
+    nextExp: 270
+    atk: 45
+    def: 18
+  - level: 10
+    maxHp: 200
+    maxStamina: 200
+    nextExp: 300
+    atk: 50
+    def: 20
+  - level: 11
+    maxHp: 220
+    maxStamina: 220
+    nextExp: 330
+    atk: 55
+    def: 22
+  - level: 12
+    maxHp: 240
+    maxStamina: 240
+    nextExp: 360
+    atk: 60
+    def: 24
+  - level: 13
+    maxHp: 260
+    maxStamina: 260
+    nextExp: 390
+    atk: 65
+    def: 26
+  - level: 14
+    maxHp: 280
+    maxStamina: 280
+    nextExp: 420
+    atk: 70
+    def: 28
+  - level: 15
+    maxHp: 300
+    maxStamina: 300
+    nextExp: 450
+    atk: 75
+    def: 30
+  - level: 16
+    maxHp: 320
+    maxStamina: 320
+    nextExp: 480
+    atk: 80
+    def: 32
+  - level: 17
+    maxHp: 340
+    maxStamina: 340
+    nextExp: 510
+    atk: 85
+    def: 34
+  - level: 18
+    maxHp: 360
+    maxStamina: 360
+    nextExp: 540
+    atk: 90
+    def: 36
+  - level: 19
+    maxHp: 380
+    maxStamina: 380
+    nextExp: 570
+    atk: 95
+    def: 38
+  - level: 20
+    maxHp: 400
+    maxStamina: 400
+    nextExp: 600
+    atk: 100
+    def: 40
+  - level: 21
+    maxHp: 420
+    maxStamina: 420
+    nextExp: 630
+    atk: 105
+    def: 42
+  - level: 22
+    maxHp: 440
+    maxStamina: 440
+    nextExp: 660
+    atk: 110
+    def: 44
+  - level: 23
+    maxHp: 460
+    maxStamina: 460
+    nextExp: 690
+    atk: 115
+    def: 46
+  - level: 24
+    maxHp: 480
+    maxStamina: 480
+    nextExp: 720
+    atk: 120
+    def: 48
+  - level: 25
+    maxHp: 500
+    maxStamina: 500
+    nextExp: 750
+    atk: 125
+    def: 50
+  - level: 26
+    maxHp: 520
+    maxStamina: 520
+    nextExp: 780
+    atk: 130
+    def: 52
+  - level: 27
+    maxHp: 540
+    maxStamina: 540
+    nextExp: 810
+    atk: 135
+    def: 54
+  - level: 28
+    maxHp: 560
+    maxStamina: 560
+    nextExp: 840
+    atk: 140
+    def: 56
+  - level: 29
+    maxHp: 580
+    maxStamina: 580
+    nextExp: 870
+    atk: 145
+    def: 58
+  - level: 30
+    maxHp: 600
+    maxStamina: 600
+    nextExp: 900
+    atk: 150
+    def: 60
+  - level: 31
+    maxHp: 620
+    maxStamina: 620
+    nextExp: 930
+    atk: 155
+    def: 62
+  - level: 32
+    maxHp: 640
+    maxStamina: 640
+    nextExp: 960
+    atk: 160
+    def: 64
+  - level: 33
+    maxHp: 660
+    maxStamina: 660
+    nextExp: 990
+    atk: 165
+    def: 66
+  - level: 34
+    maxHp: 680
+    maxStamina: 680
+    nextExp: 1020
+    atk: 170
+    def: 68
+  - level: 35
+    maxHp: 700
+    maxStamina: 700
+    nextExp: 1050
+    atk: 175
+    def: 70
+  - level: 36
+    maxHp: 720
+    maxStamina: 720
+    nextExp: 1080
+    atk: 180
+    def: 72
+  - level: 37
+    maxHp: 740
+    maxStamina: 740
+    nextExp: 1110
+    atk: 185
+    def: 74
+  - level: 38
+    maxHp: 760
+    maxStamina: 760
+    nextExp: 1140
+    atk: 190
+    def: 76
+  - level: 39
+    maxHp: 780
+    maxStamina: 780
+    nextExp: 1170
+    atk: 195
+    def: 78
+  - level: 40
+    maxHp: 800
+    maxStamina: 800
+    nextExp: 1200
+    atk: 200
+    def: 80
+  - level: 41
+    maxHp: 820
+    maxStamina: 820
+    nextExp: 1230
+    atk: 205
+    def: 82
+  - level: 42
+    maxHp: 840
+    maxStamina: 840
+    nextExp: 1260
+    atk: 210
+    def: 84
+  - level: 43
+    maxHp: 860
+    maxStamina: 860
+    nextExp: 1290
+    atk: 215
+    def: 86
+  - level: 44
+    maxHp: 880
+    maxStamina: 880
+    nextExp: 1320
+    atk: 220
+    def: 88
+  - level: 45
+    maxHp: 900
+    maxStamina: 900
+    nextExp: 1350
+    atk: 225
+    def: 90
+  - level: 46
+    maxHp: 920
+    maxStamina: 920
+    nextExp: 1380
+    atk: 230
+    def: 92
+  - level: 47
+    maxHp: 940
+    maxStamina: 940
+    nextExp: 1410
+    atk: 235
+    def: 94
+  - level: 48
+    maxHp: 960
+    maxStamina: 960
+    nextExp: 1440
+    atk: 240
+    def: 96
+  - level: 49
+    maxHp: 980
+    maxStamina: 980
+    nextExp: 1470
+    atk: 245
+    def: 98
+  - level: 50
+    maxHp: 1000
+    maxStamina: 1000
+    nextExp: 1500
+    atk: 250
+    def: 100
+  - level: 51
+    maxHp: 1020
+    maxStamina: 1020
+    nextExp: 1530
+    atk: 255
+    def: 102
+  - level: 52
+    maxHp: 1040
+    maxStamina: 1040
+    nextExp: 1560
+    atk: 260
+    def: 104
+  - level: 53
+    maxHp: 1060
+    maxStamina: 1060
+    nextExp: 1590
+    atk: 265
+    def: 106
+  - level: 54
+    maxHp: 1080
+    maxStamina: 1080
+    nextExp: 1620
+    atk: 270
+    def: 108
+  - level: 55
+    maxHp: 1100
+    maxStamina: 1100
+    nextExp: 1650
+    atk: 275
+    def: 110
+  - level: 56
+    maxHp: 1120
+    maxStamina: 1120
+    nextExp: 1680
+    atk: 280
+    def: 112
+  - level: 57
+    maxHp: 1140
+    maxStamina: 1140
+    nextExp: 1710
+    atk: 285
+    def: 114
+  - level: 58
+    maxHp: 1160
+    maxStamina: 1160
+    nextExp: 1740
+    atk: 290
+    def: 116
+  - level: 59
+    maxHp: 1180
+    maxStamina: 1180
+    nextExp: 1770
+    atk: 295
+    def: 118
+  - level: 60
+    maxHp: 1200
+    maxStamina: 1200
+    nextExp: 1800
+    atk: 300
+    def: 120
+  - level: 61
+    maxHp: 1220
+    maxStamina: 1220
+    nextExp: 1830
+    atk: 305
+    def: 122
+  - level: 62
+    maxHp: 1240
+    maxStamina: 1240
+    nextExp: 1860
+    atk: 310
+    def: 124
+  - level: 63
+    maxHp: 1260
+    maxStamina: 1260
+    nextExp: 1890
+    atk: 315
+    def: 126
+  - level: 64
+    maxHp: 1280
+    maxStamina: 1280
+    nextExp: 1920
+    atk: 320
+    def: 128
+  - level: 65
+    maxHp: 1300
+    maxStamina: 1300
+    nextExp: 1950
+    atk: 325
+    def: 130
+  - level: 66
+    maxHp: 1320
+    maxStamina: 1320
+    nextExp: 1980
+    atk: 330
+    def: 132
+  - level: 67
+    maxHp: 1340
+    maxStamina: 1340
+    nextExp: 2010
+    atk: 335
+    def: 134
+  - level: 68
+    maxHp: 1360
+    maxStamina: 1360
+    nextExp: 2040
+    atk: 340
+    def: 136
+  - level: 69
+    maxHp: 1380
+    maxStamina: 1380
+    nextExp: 2070
+    atk: 345
+    def: 138
+  - level: 70
+    maxHp: 1400
+    maxStamina: 1400
+    nextExp: 2100
+    atk: 350
+    def: 140
+  - level: 71
+    maxHp: 1420
+    maxStamina: 1420
+    nextExp: 2130
+    atk: 355
+    def: 142
+  - level: 72
+    maxHp: 1440
+    maxStamina: 1440
+    nextExp: 2160
+    atk: 360
+    def: 144
+  - level: 73
+    maxHp: 1460
+    maxStamina: 1460
+    nextExp: 2190
+    atk: 365
+    def: 146
+  - level: 74
+    maxHp: 1480
+    maxStamina: 1480
+    nextExp: 2220
+    atk: 370
+    def: 148
+  - level: 75
+    maxHp: 1500
+    maxStamina: 1500
+    nextExp: 2250
+    atk: 375
+    def: 150
+  - level: 76
+    maxHp: 1520
+    maxStamina: 1520
+    nextExp: 2280
+    atk: 380
+    def: 152
+  - level: 77
+    maxHp: 1540
+    maxStamina: 1540
+    nextExp: 2310
+    atk: 385
+    def: 154
+  - level: 78
+    maxHp: 1560
+    maxStamina: 1560
+    nextExp: 2340
+    atk: 390
+    def: 156
+  - level: 79
+    maxHp: 1580
+    maxStamina: 1580
+    nextExp: 2370
+    atk: 395
+    def: 158
+  - level: 80
+    maxHp: 1600
+    maxStamina: 1600
+    nextExp: 2400
+    atk: 400
+    def: 160
+  - level: 81
+    maxHp: 1620
+    maxStamina: 1620
+    nextExp: 2430
+    atk: 405
+    def: 162
+  - level: 82
+    maxHp: 1640
+    maxStamina: 1640
+    nextExp: 2460
+    atk: 410
+    def: 164
+  - level: 83
+    maxHp: 1660
+    maxStamina: 1660
+    nextExp: 2490
+    atk: 415
+    def: 166
+  - level: 84
+    maxHp: 1680
+    maxStamina: 1680
+    nextExp: 2520
+    atk: 420
+    def: 168
+  - level: 85
+    maxHp: 1700
+    maxStamina: 1700
+    nextExp: 2550
+    atk: 425
+    def: 170
+  - level: 86
+    maxHp: 1720
+    maxStamina: 1720
+    nextExp: 2580
+    atk: 430
+    def: 172
+  - level: 87
+    maxHp: 1740
+    maxStamina: 1740
+    nextExp: 2610
+    atk: 435
+    def: 174
+  - level: 88
+    maxHp: 1760
+    maxStamina: 1760
+    nextExp: 2640
+    atk: 440
+    def: 176
+  - level: 89
+    maxHp: 1780
+    maxStamina: 1780
+    nextExp: 2670
+    atk: 445
+    def: 178
+  - level: 90
+    maxHp: 1800
+    maxStamina: 1800
+    nextExp: 2700
+    atk: 450
+    def: 180
+  - level: 91
+    maxHp: 1820
+    maxStamina: 1820
+    nextExp: 2730
+    atk: 455
+    def: 182
+  - level: 92
+    maxHp: 1840
+    maxStamina: 1840
+    nextExp: 2760
+    atk: 460
+    def: 184
+  - level: 93
+    maxHp: 1860
+    maxStamina: 1860
+    nextExp: 2790
+    atk: 465
+    def: 186
+  - level: 94
+    maxHp: 1880
+    maxStamina: 1880
+    nextExp: 2820
+    atk: 470
+    def: 188
+  - level: 95
+    maxHp: 1900
+    maxStamina: 1900
+    nextExp: 2850
+    atk: 475
+    def: 190
+  - level: 96
+    maxHp: 1920
+    maxStamina: 1920
+    nextExp: 2880
+    atk: 480
+    def: 192
+  - level: 97
+    maxHp: 1940
+    maxStamina: 1940
+    nextExp: 2910
+    atk: 485
+    def: 194
+  - level: 98
+    maxHp: 1960
+    maxStamina: 1960
+    nextExp: 2940
+    atk: 490
+    def: 196
+  - level: 99
+    maxHp: 1980
+    maxStamina: 1980
+    nextExp: 2970
+    atk: 495
+    def: 198
+  - level: 100
+    maxHp: 2000
+    maxStamina: 2000
+    nextExp: 3000
+    atk: 500
+    def: 200

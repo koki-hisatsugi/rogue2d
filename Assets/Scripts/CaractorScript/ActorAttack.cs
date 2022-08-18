@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActorAttack : MonoBehaviour
 {
-    public void Attack(ActorDirection dir, LayerMask targetLayer){
+    public void Attack(ActorDirection dir, LayerMask targetLayer, int atk){
 
         Vector2 start = transform.position;
         Vector2 end = new Vector2();
@@ -27,11 +27,13 @@ public class ActorAttack : MonoBehaviour
         _BoxCollider2D.enabled = false;
         hit = Physics2D.Linecast(start, end, targetLayer);
         _BoxCollider2D.enabled = true;
+        Debug.Log("ここまで来てる");
         if(hit.transform == null) return;
+        Debug.Log("hit.transformがnullじゃない");
         if(hit.collider.gameObject != null){
             Debug.Log(hit.collider.gameObject.name);
             if(hit.collider.gameObject.tag == "Enemy" || hit.collider.gameObject.tag == "Player"){
-                hit.collider.gameObject.GetComponent<ActorManager>().Damage(5);
+                hit.collider.gameObject.GetComponent<ActorManager>().Damage(atk);
             }
         }
     }

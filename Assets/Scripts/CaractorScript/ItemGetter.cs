@@ -13,12 +13,12 @@ public class ItemGetter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Food")
+        if(collision.tag == "Food" || collision.tag == "HPball")
         {
             collision.gameObject.SetActive(false);
-            _AM.StaminaCharge(10);
+            _AM.HpHelth(10);
         }
-        else if (collision.tag == "Soda")
+        else if (collision.tag == "Soda" || collision.tag == "STball")
         {
             collision.gameObject.SetActive(false);
             _AM.StaminaCharge(20);

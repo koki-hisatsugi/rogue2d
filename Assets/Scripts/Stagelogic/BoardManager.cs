@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +33,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private GameObject _MapElement;
 
     public List<GameObject> _RoomMasks;
+    public List<Rect2D> _Rooms;
 
     public Dictionary<string,GameObject> MapDic;
 
@@ -71,17 +71,14 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public Array2D SetupScene()
+    public Array2D SetupScene(int floorLevel)
     {
         InitialiseList();
         _MainCamera = GameObject.Find("Main Camera");
-        //LayoutObjectRandom(wallTiles, wallMinimum, wallMaximun);
-        //LayoutObjectRandom(foodTiles, foodMinimum, FoodMaximun);
         RandomDungeon rDungeon = new RandomDungeon();
         Array2D a2d = rDungeon.Create(dungeonSize, dungeonSize);
         _RoomMasks = rDungeon.Get_roomMasks;
-        // test = GameObject.Find("Image");
-        // Destroy(test2.transform);
+        _Rooms = rDungeon.Get_rooms;
         _Field = new GameObject("Field");
         Enemys = new GameObject("Enemys");
         Enemys.transform.parent = _Field.transform;
@@ -131,6 +128,8 @@ public class BoardManager : MonoBehaviour
                         ActorManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<ActorManager>();
                         tmpEnemy_ActorManager.GetSet_ActorPosX = i;
                         tmpEnemy_ActorManager.GetSet_ActorPosY = j;
+                        tmpEnemy_ActorManager.GetSet_Level = Random.Range(floorLevel,floorLevel+3);
+                        tmpEnemy_ActorManager.setEnemyStatus();
                         Enemylist.Add(tmpEnemy);
                         // enemy.transform.position = new Vector3(i, j, 0);
                     }
@@ -138,6 +137,30 @@ public class BoardManager : MonoBehaviour
             }
         }
         return a2d;
+    }
+    public void EnemyListRemove(){
+        Enemylist.Remove(null);
+    }
+    public List<GameObject> EnemySpawn(int floorLevel){
+        Enemylist.Clear();
+        GameObject tileChoice = enemyTiles[Random.Range(0, enemyTiles.Length)];
+        
+        // エネミーの発生数
+        int randomSpawnNum = UnityEngine.Random.Range(1, 3);
+        for(int i = 0; i <= randomSpawnNum; i++){
+            int randomNum = Random.Range(0, _Rooms.Count -1);
+            int ePosX = Random.Range(_Rooms[randomNum].left, _Rooms[randomNum].right);
+            int ePosY = Random.Range(_Rooms[randomNum].bottom, _Rooms[randomNum].top);
+            GameObject tmpEnemy = Instantiate(tileChoice, new Vector3(ePosX, ePosY, 0), Quaternion.identity, Enemys.transform);
+            ActorManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<ActorManager>();
+            tmpEnemy_ActorManager.GetSet_ActorPosX = ePosX;
+            tmpEnemy_ActorManager.GetSet_ActorPosY = ePosY;
+            tmpEnemy_ActorManager.GetSet_Level = Random.Range(floorLevel,floorLevel+3);
+            tmpEnemy_ActorManager.setEnemyStatus();
+            Enemylist.Add(tmpEnemy);
+        }
+
+        return Enemylist;
     }
 
     public List<GameObject> mapping(Array2D a2d)

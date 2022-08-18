@@ -3,7 +3,29 @@ guid: 9b4f4aecdd837114d9dccc550039ef72
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _Player: {instanceID: 0}
+  - _PlayerActorMove: {instanceID: 0}
+  - _PlayerActorManager: {instanceID: 0}
+  - _Enemy: {instanceID: 0}
+  - _EnemyActorMove: {instanceID: 0}
+  - _EnemyActorManager: {instanceID: 0}
+  - _ConfirmPanel_NextFloor: {instanceID: 0}
+  - _OKButton_NextFloor: {instanceID: 0}
+  - _NOButton_NextFloor: {instanceID: 0}
+  - _OK_NextFloor: {instanceID: 0}
+  - _NO_NextFloor: {instanceID: 0}
+  - _NextStandByPanel: {instanceID: 0}
+  - _NextStandText: {instanceID: 0}
+  - _Enemys: {instanceID: 0}
+  - EnemyExplodeParticle: {instanceID: 0}
+  - Select1: {instanceID: 0}
+  - Decision: {instanceID: 0}
+  - ExitSound: {instanceID: 0}
+  - ResultBGM: {instanceID: 0}
+  - _AudioSource: {instanceID: 0}
+  - _RankingPanel: {instanceID: 0}
+  - _PlayfabManager: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

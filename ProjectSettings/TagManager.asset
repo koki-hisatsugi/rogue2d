@@ -8,6 +8,8 @@ TagManager:
   - Exit
   - Enemy
   - Soda
+  - HPball
+  - STball
   layers:
   - Default
   - TransparentFX

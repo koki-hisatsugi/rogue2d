@@ -10,6 +10,9 @@ public class RandomDungeon
     private Array2D data;
     private List<Area2D> areas;
     private List<Rect2D> rooms;
+    public List<Rect2D> Get_rooms{
+        get { return rooms; }
+    }
     private List<GameObject> roomMasks;
     public List<GameObject> Get_roomMasks
     {
