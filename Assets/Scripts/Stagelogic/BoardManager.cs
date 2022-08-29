@@ -96,7 +96,7 @@ public class BoardManager : MonoBehaviour
                 }
                 else
                 {
-                    GameObject tileChoice = floorTiles[Random.Range(0, outWallTiles.Length)];
+                    GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
                     //Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity);
                     Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
 
@@ -125,7 +125,7 @@ public class BoardManager : MonoBehaviour
                     {
                         tileChoice = enemyTiles[Random.Range(0, enemyTiles.Length)];
                         GameObject tmpEnemy = Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, Enemys.transform);
-                        ActorManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<ActorManager>();
+                        EnemyManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<EnemyManager>();
                         tmpEnemy_ActorManager.GetSet_ActorPosX = i;
                         tmpEnemy_ActorManager.GetSet_ActorPosY = j;
                         tmpEnemy_ActorManager.GetSet_Level = Random.Range(floorLevel,floorLevel+3);
@@ -152,7 +152,7 @@ public class BoardManager : MonoBehaviour
             int ePosX = Random.Range(_Rooms[randomNum].left, _Rooms[randomNum].right);
             int ePosY = Random.Range(_Rooms[randomNum].bottom, _Rooms[randomNum].top);
             GameObject tmpEnemy = Instantiate(tileChoice, new Vector3(ePosX, ePosY, 0), Quaternion.identity, Enemys.transform);
-            ActorManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<ActorManager>();
+            EnemyManager tmpEnemy_ActorManager = tmpEnemy.GetComponent<EnemyManager>();
             tmpEnemy_ActorManager.GetSet_ActorPosX = ePosX;
             tmpEnemy_ActorManager.GetSet_ActorPosY = ePosY;
             tmpEnemy_ActorManager.GetSet_Level = Random.Range(floorLevel,floorLevel+3);

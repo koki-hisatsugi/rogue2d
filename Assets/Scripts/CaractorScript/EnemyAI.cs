@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+    const int NodeNone = 0;
+    const int NodeOpen = 1;
+    const int NodeClose = 2;
     private List<Node> _allNodeList = new List<Node>();
     private List<Node> _shotWay = new List<Node>();
     public enum NodeStatus{
@@ -93,10 +96,10 @@ public class EnemyAI : MonoBehaviour
 
         // ゴール到達判定用のノード
         Node endNode = new Node(resultCXY.GetSetPX,resultCXY.GetSetPY,resultCXY.GetSetPX,resultCXY.GetSetPY,0);
-        endNode.setStatus(0);
+        endNode.setStatus(NodeNone);
         // スタートノード
         Node startNode = new Node(startX, startY, resultCXY.GetSetPX,resultCXY.GetSetPY, 0);
-        startNode.setStatus(1);
+        startNode.setStatus(NodeOpen);
         startNode.GetSetPP = -1;
         _allNodeList.Add(startNode);
         bool breaker = false;
@@ -115,22 +118,19 @@ public class EnemyAI : MonoBehaviour
                 Debug.Log("ジャッジブレイク");
                 breaker = true;
                 endNode = _allNodeList[minPointer];
-                endNode.setStatus(2);
+                endNode.setStatus(NodeClose);
                 break;
             }
             // 経路のOpen数が50を超えたら探索打ち切り
             if(_allNodeList.Count >= 50){
                 breaker = true;
                 endNode = _allNodeList[minPointer];
-                endNode.setStatus(2);
+                endNode.setStatus(NodeClose);
                 break;
             }
-            _allNodeList[minPointer].setStatus(2);
+            _allNodeList[minPointer].setStatus(NodeClose);
             openFourDir(_allNodeList[minPointer], baseA2d, minPointer);
         }
-        // END_WHILE:
-        // Debug.Log("allNodeListの要素数:"+_allNodeList.Count);
-        // Debug.Log(_allNodeList[_allNodeList.Count-1].GetSetX+"   " + _allNodeList[_allNodeList.Count-1].GetSetY);
         Node tmpNode = endNode;
         if(breaker){
             while(tmpNode.GetSetPP > 0){
@@ -147,10 +147,11 @@ public class EnemyAI : MonoBehaviour
 
     private void openFourDir(Node baseNode, Array2D baseA2d, int _pP){
         // 上
-        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY + 1).GetSetMapValue != BoardRemote.WallNum){
+        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY + 1).GetSetMapValue != BoardRemote.WallNum
+        && baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY + 1).GetSetMapOnActor != BoardRemote.EnemyNum){
             Node upNode = new Node(baseNode.GetSetX,baseNode.GetSetY + 1,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             upNode.GetSetPP = _pP;
-            upNode.setStatus(1);
+            upNode.setStatus(NodeOpen);
             bool isAdd = true;
             foreach(Node tmpNode in _allNodeList){
                 if(NodeJudge(tmpNode,upNode)){
@@ -165,10 +166,11 @@ public class EnemyAI : MonoBehaviour
         }
         // UP_IF_END:
         // 下
-        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY - 1).GetSetMapValue != BoardRemote.WallNum){
+        if(baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY - 1).GetSetMapValue != BoardRemote.WallNum
+        && baseA2d.Get(baseNode.GetSetX,baseNode.GetSetY - 1).GetSetMapOnActor != BoardRemote.EnemyNum){
             Node downNode = new Node(baseNode.GetSetX,baseNode.GetSetY - 1,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             downNode.GetSetPP = _pP;
-            downNode.setStatus(1);
+            downNode.setStatus(NodeOpen);
             bool isAdd = true;
             foreach(Node tmpNode in _allNodeList){
                 if(NodeJudge(tmpNode,downNode)){
@@ -183,10 +185,11 @@ public class EnemyAI : MonoBehaviour
         }
         // DOWN_IF_END:
         // 右
-        if(baseA2d.Get(baseNode.GetSetX + 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum){
+        if(baseA2d.Get(baseNode.GetSetX + 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum
+        && baseA2d.Get(baseNode.GetSetX + 1,baseNode.GetSetY).GetSetMapOnActor != BoardRemote.EnemyNum){
             Node rightNode = new Node(baseNode.GetSetX + 1,baseNode.GetSetY,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             rightNode.GetSetPP = _pP;
-            rightNode.setStatus(1);
+            rightNode.setStatus(NodeOpen);
             bool isAdd = true;
             foreach(Node tmpNode in _allNodeList){
                 if(NodeJudge(tmpNode,rightNode)){
@@ -201,10 +204,11 @@ public class EnemyAI : MonoBehaviour
         }
         // RIGHT_IF_END:
         // 左
-        if(baseA2d.Get(baseNode.GetSetX - 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum){
+        if(baseA2d.Get(baseNode.GetSetX - 1,baseNode.GetSetY).GetSetMapValue != BoardRemote.WallNum
+        && baseA2d.Get(baseNode.GetSetX - 1,baseNode.GetSetY).GetSetMapOnActor != BoardRemote.EnemyNum){
             Node leftNode = new Node(baseNode.GetSetX - 1,baseNode.GetSetY,baseNode.GetSetEndX,baseNode.GetSetEndY, baseNode.GetCost + Random.Range(1,3));
             leftNode.GetSetPP = _pP;
-            leftNode.setStatus(1);
+            leftNode.setStatus(NodeOpen);
             bool isAdd = true;
             foreach(Node tmpNode in _allNodeList){
                 if(NodeJudge(tmpNode,leftNode)){
@@ -224,9 +228,6 @@ public class EnemyAI : MonoBehaviour
                 if(baseA2d.Get(x,z).GetSetMapOnActor == BoardRemote.PlayerNum){
                     CXY.GetSetPX = x;
                     CXY.GetSetPY = z;
-                    // playerPosX = x;
-                    // playerPosY = z;
-                    // Debug.Log("playerPosX:"+playerPosX + "   playerPosY:"+playerPosY);
                     return;
                 }
             }

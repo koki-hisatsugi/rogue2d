@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f4aecdd837114d9dccc550039ef72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logEnabled: 0
   SpawnTurn: 10
   _SpawnTurnCount: 0
   _Player: {fileID: 0}
@@ -72,6 +73,8 @@ MonoBehaviour:
   _MapObj: []
   EnemyExplodeParticle: {fileID: 4598847658299055833, guid: cbfa8b1fb1e617045b497f595ca96a7f,
     type: 3}
+  LevelUpParticle: {fileID: 4598847658299055833, guid: 9c1ca27262c0d1c4bae718f3e8ec8deb,
+    type: 3}
   Select1: {fileID: 8300000, guid: 7513fe3bd2685934e9ac78b1ba7a3e7f, type: 3}
   Decision: {fileID: 8300000, guid: c5aad253866c47543bacbbae04f07ee1, type: 3}
   ExitSound: {fileID: 8300000, guid: 5a809391902d3b14396b3ae63b7f6198, type: 3}
@@ -96,14 +99,17 @@ MonoBehaviour:
   colums: 8
   rows: 8
   floorTiles:
-  - {fileID: 5378597424591979347, guid: f67ce662f70984e45a9b385a1798aaac, type: 3}
-  - {fileID: 6865841486624838004, guid: 5919f49a6dc30ea41b997892bc83e0b8, type: 3}
-  - {fileID: 377313353133313277, guid: 7041fb7e509b52f4da10addad9228072, type: 3}
-  - {fileID: 2330628227090114007, guid: e6c96ff7846638645b8cd7e14b93efc0, type: 3}
-  - {fileID: 3686294013038783642, guid: dd864b37556bc904e9c686e557a2f20e, type: 3}
-  - {fileID: 1625464915169239299, guid: bc8ccff7ebf17e049af55ef5db3c942e, type: 3}
-  - {fileID: 3514556882679083914, guid: b058c526260e26f4796a97424215865b, type: 3}
-  - {fileID: 7447246338558245295, guid: 54a5315cf87117e45a2be1202a320a25, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: af459573eb353d34d8745d8cc98d3e29, type: 3}
+  - {fileID: 5378597424591979347, guid: 181f29cac8a86b842897223cb0f1c1be, type: 3}
+  - {fileID: 5378597424591979347, guid: 8dafe1fc9aa0513439ae98aab03e6574, type: 3}
+  - {fileID: 5378597424591979347, guid: 272fc9de2bbab3a44a88621e8635d3bc, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
+  - {fileID: 5378597424591979347, guid: 5de09ef71733bee40846245a9e99f5db, type: 3}
   wallTiles:
   - {fileID: 1152246922106004822, guid: 7c67a47a93dff1b4dbeb25c2850b3f95, type: 3}
   - {fileID: 1683115005355493337, guid: a9b6d12f53bc99147b56b18886e79a2d, type: 3}
@@ -118,14 +124,16 @@ MonoBehaviour:
   - {fileID: 125921245134790734, guid: f13f61e61fb1060428f13cf1a6a8cc2e, type: 3}
   - {fileID: 125921245134790734, guid: d8d3c4aa9875206448b8a667b058d4bb, type: 3}
   outWallTiles:
-  - {fileID: 9140012060268556613, guid: 8290aaaf8217ce649834445253ea22f9, type: 3}
-  - {fileID: 8413751625969855494, guid: 9e543f6fdb3cf31488fd81728294ec1b, type: 3}
+  - {fileID: 8413751625969855494, guid: 1ae757698ecbd8d4599b491a2d4c29c1, type: 3}
+  - {fileID: 9140012060268556613, guid: bad73ae5f1ba91a438288951cabbcba9, type: 3}
+  - {fileID: 8413751625969855494, guid: 17bece73e3908b342908adf43d531e72, type: 3}
+  - {fileID: 9140012060268556613, guid: 6a579f3b149736f4f91c90fded46aa9e, type: 3}
   enemyTiles:
   - {fileID: 7115134329973930485, guid: 126c6b94ee45cc349bca915331aef32f, type: 3}
   - {fileID: 7115134329973930485, guid: 5dbea1b4bb767714795f66dbedc8f143, type: 3}
   player: {fileID: 1082788504057782067, guid: d4adc96f02c526447bab3ef6d3e8740b, type: 3}
   enemy: {fileID: 7115134329973930485, guid: 126c6b94ee45cc349bca915331aef32f, type: 3}
-  exit: {fileID: 7623424065570510919, guid: b834f3d0b9e5a444aa864c8603720f48, type: 3}
+  exit: {fileID: 7623424065570510919, guid: 6c2076d8b34c184448ae22fd5ecffae6, type: 3}
   _MainCamera: {fileID: 0}
   wallMinimum: 5
   wallMaximun: 9

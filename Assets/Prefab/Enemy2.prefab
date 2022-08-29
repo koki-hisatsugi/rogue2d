@@ -388,8 +388,8 @@ GameObject:
   - component: {fileID: 2388714320217891094}
   - component: {fileID: 4695362693088433968}
   - component: {fileID: 849701712422393368}
+  - component: {fileID: 1777424876984593684}
   - component: {fileID: 568835288117149507}
-  - component: {fileID: 1253001857583914221}
   - component: {fileID: -1346635868320605506}
   - component: {fileID: 6444053196822477674}
   - component: {fileID: -905377462187014898}
@@ -457,7 +457,7 @@ SpriteRenderer:
   m_SortingLayerID: -900995045
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4373504169510099217, guid: 8b237cadc4473844e93fc16c447975d1,
+  m_Sprite: {fileID: 6013560869732746042, guid: 2999b77023306e24aa27e4c5bb001d55,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -516,6 +516,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &1777424876984593684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7115134329973930485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b2adb61ef240148b0a62c759301f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: 
+  _Level: 0
+  _HP: 0
+  _Atk: 0
+  _Def: 0
+  _Exp: 0
+  _HPbar: {fileID: 0}
+  _ActorSprite: {fileID: 0}
+  _Attack1: {fileID: 8300000, guid: 11d469a6f7e4d644581b0306004b65b2, type: 3}
+  _AudioSource: {fileID: 0}
+  _ActorPosX: 0
+  _ActorPosY: 0
+  _AtkMiss: {fileID: 8300000, guid: ad964e0f11dd7fb45a126896538dd200, type: 3}
+  _HPHeal: {fileID: 8300000, guid: 7c621268e0e425b4fb85f32eedcc420a, type: 3}
+  _ThisActorDir: {fileID: 0}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isAttack: 0
+  ThisAction: 0
+  moveHorizontal: 0
+  moveVatical: 0
+  _EnemyStatus: {fileID: 11400000, guid: bb546b0c3653513499d1633429ff9daa, type: 2}
 --- !u!114 &568835288117149507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,46 +569,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _BoxCollider2D: {fileID: 0}
---- !u!114 &1253001857583914221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7115134329973930485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2591270ef3f43824080388c0cdaa8b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Name: "\u30C8\u30E9\u30F3\u30D7\u30DE\u30F3"
-  _Level: 0
-  _HP: 20
-  _Atk: 0
-  _Def: 0
-  _Stamina: 0
-  _Exp: 0
-  _HPbar: {fileID: 0}
-  _STbar: {fileID: 0}
-  _PlayerLevelText: {fileID: 0}
-  _ActorSprite: {fileID: 0}
-  _Attack1: {fileID: 8300000, guid: 11d469a6f7e4d644581b0306004b65b2, type: 3}
-  _AudioSource: {fileID: 0}
-  _ActorPosX: 0
-  _ActorPosY: 0
-  _AtkMiss: {fileID: 8300000, guid: ad964e0f11dd7fb45a126896538dd200, type: 3}
-  _STHeal: {fileID: 0}
-  _HPHeal: {fileID: 0}
-  _LevelUp: {fileID: 0}
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  isAttack: 0
-  ThisAction: 0
-  moveHorizontal: 0
-  moveVatical: 0
-  _PlayerStatus: {fileID: 0}
-  _EnemyStatus: {fileID: 0}
 --- !u!114 &-1346635868320605506
 MonoBehaviour:
   m_ObjectHideFlags: 0

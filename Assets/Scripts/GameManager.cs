@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -10,6 +11,7 @@ using LogManagers;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [SerializeField] bool logEnabled;
     BoardManager _boardManager;
     // スタミナを消費するまでのターン数
     private int _StaminaCostTurn;
@@ -19,10 +21,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _SpawnTurnCount;
     [SerializeField] private GameObject _Player;
     [SerializeField] private ActorMove _PlayerActorMove;
-    [SerializeField] private ActorManager _PlayerActorManager;
+    [SerializeField] private PlayerManager _PlayerActorManager;
     [SerializeField] private GameObject _Enemy;
     [SerializeField] private ActorMove _EnemyActorMove;
-    [SerializeField] private ActorManager _EnemyActorManager;
+    [SerializeField] private EnemyManager _EnemyActorManager;
     [SerializeField] private Array2D _a2d;
     [SerializeField] private Array2D _ma2d;
     [SerializeField] private GameObject _ConfirmPanel_NextFloor;
@@ -38,8 +40,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> _MapObj;
     private Text floorLevel;
     private int intFloorLevel;
+    // パーティクル爆発
     public GameObject EnemyExplodeParticle;
     private GameObject _EnemyExplodeParticle;
+    // パーティクルレベルアップ
+    public GameObject LevelUpParticle;
+    private GameObject _LevelUpParticle;
     // 選択音
     public AudioClip Select1;
     // 決定音
@@ -67,9 +73,12 @@ public class GameManager : MonoBehaviour
         GameStart,
         SelectFase,
         NextStandByFase,
+        TestFase,
     }
 
     [SerializeField] private GameState _thisGameState;
+
+    CancellationTokenSource cts;
 
     public void setGamestate(GameState gs)
     {
@@ -78,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // ゲームマネージャーをシングルトン化
+        // // ゲームマネージャーをシングルトン化
         if (instance == null)
         {
             instance = this;
@@ -87,6 +96,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Debug.unityLogger.logEnabled = logEnabled;  
         // DontDestroyOnLoad(gameObject);
         this.gameObject.name = "GameManager";
         this.gameObject.transform.position = new Vector2(0,0);
@@ -99,7 +109,7 @@ public class GameManager : MonoBehaviour
         // プレイヤーオブジェクトを取得し、付随するスクリプトを取得
         _Player = GameObject.Find("Player");
         _PlayerActorMove = _Player.GetComponent<ActorMove>();
-        _PlayerActorManager = _Player.GetComponent<ActorManager>();
+        _PlayerActorManager = _Player.GetComponent<PlayerManager>();
         _boardManager.player = _Player;
 
         // 次フロアへの移動確認のパネルを取得する
@@ -125,6 +135,9 @@ public class GameManager : MonoBehaviour
 
         _EnemyExplodeParticle = Instantiate(EnemyExplodeParticle, new Vector3(0, 0, 0), Quaternion.identity);
         _EnemyExplodeParticle.SetActive(false);
+
+        _LevelUpParticle = Instantiate(LevelUpParticle, new Vector3(0, 0, 0), Quaternion.identity);
+        _LevelUpParticle.SetActive(false);
 
         _AudioSource = GetComponent<AudioSource>();
         _selectbutton = true;
@@ -156,16 +169,22 @@ public class GameManager : MonoBehaviour
     // async(えいしんく)をつける
     private void Start()
     {
-        _ = UpdateLoop();
+        cts = new CancellationTokenSource();  
+        CancellationToken token = cts.Token;  
+        _ = UpdateLoop(token);
         // InitGame();
     }
 
+    private void OnDestroy(){
+        cts.Cancel();
+    }
+
     // フェーズの管理をして各行動を制限する
-    async UniTask UpdateLoop()
+    async UniTask UpdateLoop(CancellationToken token)
     {
         while (true)
         {
-            await UniTask.Yield(PlayerLoopTiming.Update);  // Unityのupdate関数と同じフレームで
+            await UniTask.Yield(PlayerLoopTiming.Update, token);  // Unityのupdate関数と同じフレームで
             if (_thisGameState != GameState.GameStart && 
                 _thisGameState != GameState.SelectFase &&
                 Input.GetKey(KeyCode.LeftShift) &&
@@ -209,6 +228,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.GameEnd:           // フロア遷移アニメーション
                     await GameOver();
+                    break;
+                case GameState.TestFase:           // フロア遷移アニメーション
+                    Debug.Log(_thisGameState);
                     break;
             }
         }
@@ -338,7 +360,8 @@ public class GameManager : MonoBehaviour
     
     private async UniTask GameOver()
     {
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetKeyDown(KeyCode.Z)){
+            _thisGameState= GameState.TestFase;
             SceneLoader.SceneLoading("TitleScene");
         }
     }
@@ -350,12 +373,6 @@ public class GameManager : MonoBehaviour
         bool inputTrue = false;
         await UniTask.WaitUntil(() => Input.anyKey);
         // プレイヤーの行動を選定
-        if (Input.GetMouseButtonDown(1))
-        {
-            AutoMapping();
-            Debug.Log("オートマッピング");
-            return;
-        }
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
             // 矢印キーが押された場合、以下の処理を行う
@@ -418,7 +435,7 @@ public class GameManager : MonoBehaviour
         {
             // エネミーのスクリプトを格納しておく
             _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
-            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+            _EnemyActorManager = enemy.gameObject.GetComponent<EnemyManager>();
             // エネミーのAIをインスタンスする
             EnemyAI EAI = new EnemyAI();
             // エネミーの座標を格納する
@@ -492,7 +509,7 @@ public class GameManager : MonoBehaviour
             foreach (Transform enemy in _Enemys.transform)
             {
                 _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
-                _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+                _EnemyActorManager = enemy.gameObject.GetComponent<EnemyManager>();
                 Debug.Log(_EnemyActorManager.ThisAction);
                 if (_EnemyActorManager.GetHP <= 0)
                 {
@@ -502,7 +519,11 @@ public class GameManager : MonoBehaviour
                     _EnemyExplodeParticle.transform.position = new Vector3(_EnemyActorManager.GetSet_ActorPosX, _EnemyActorManager.GetSet_ActorPosY, 0);
                     _EnemyExplodeParticle.SetActive(false);
                     _EnemyExplodeParticle.SetActive(true);
-                    _PlayerActorManager.AddExp(_EnemyActorManager.GetExp);
+                    if(_PlayerActorManager.AddExp(_EnemyActorManager.GetExp)){
+                        _LevelUpParticle.transform.position = new Vector3(_PlayerActorManager.GetSet_ActorPosX, _PlayerActorManager.GetSet_ActorPosY, 0);
+                        _LevelUpParticle.SetActive(false);
+                        _LevelUpParticle.SetActive(true);
+                    };
                     Destroy(enemy.gameObject);
                 }
             }
@@ -526,7 +547,7 @@ public class GameManager : MonoBehaviour
         foreach (Transform enemy in _Enemys.transform)
         {
             _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
-            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+            _EnemyActorManager = enemy.gameObject.GetComponent<EnemyManager>();
             if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isMove)
             {
                 _EnemyActorManager.Action();
@@ -552,7 +573,7 @@ public class GameManager : MonoBehaviour
         foreach (Transform enemy in _Enemys.transform)
         {
             _EnemyActorMove = enemy.gameObject.GetComponent<ActorMove>();
-            _EnemyActorManager = enemy.gameObject.GetComponent<ActorManager>();
+            _EnemyActorManager = enemy.gameObject.GetComponent<EnemyManager>();
             if (_EnemyActorManager.ThisAction == ActorManager.ActorAction.isAttack)
             {
                 float EnemyPosX = enemy.transform.position.x, EnemyPosY = enemy.transform.position.y;

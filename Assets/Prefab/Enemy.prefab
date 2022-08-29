@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 4695362693088433968}
   - component: {fileID: 849701712422393368}
   - component: {fileID: 568835288117149507}
-  - component: {fileID: 1253001857583914221}
+  - component: {fileID: -4013608246860624930}
   - component: {fileID: -1346635868320605506}
   - component: {fileID: 6444053196822477674}
   - component: {fileID: -905377462187014898}
@@ -534,7 +534,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _BoxCollider2D: {fileID: 0}
---- !u!114 &1253001857583914221
+--- !u!114 &-4013608246860624930
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -543,28 +543,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7115134329973930485}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2591270ef3f43824080388c0cdaa8b2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 27b2adb61ef240148b0a62c759301f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Name: "\u30C8\u30E9\u30F3\u30D7\u30DE\u30F3"
+  _Name: 
   _Level: 0
-  _HP: 20
+  _HP: 0
   _Atk: 0
   _Def: 0
-  _Stamina: 0
   _Exp: 0
   _HPbar: {fileID: 0}
-  _STbar: {fileID: 0}
-  _PlayerLevelText: {fileID: 0}
   _ActorSprite: {fileID: 0}
   _Attack1: {fileID: 8300000, guid: 11d469a6f7e4d644581b0306004b65b2, type: 3}
   _AudioSource: {fileID: 0}
   _ActorPosX: 0
   _ActorPosY: 0
   _AtkMiss: {fileID: 8300000, guid: ad964e0f11dd7fb45a126896538dd200, type: 3}
-  _STHeal: {fileID: 0}
-  _HPHeal: {fileID: 0}
-  _LevelUp: {fileID: 0}
+  _HPHeal: {fileID: 8300000, guid: 7c621268e0e425b4fb85f32eedcc420a, type: 3}
   _targetLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -572,8 +567,7 @@ MonoBehaviour:
   ThisAction: 0
   moveHorizontal: 0
   moveVatical: 0
-  _PlayerStatus: {fileID: 0}
-  _EnemyStatus: {fileID: 0}
+  _EnemyStatus: {fileID: 11400000, guid: c24f73167fbd1e448983037c1e5d5f2c, type: 2}
 --- !u!114 &-1346635868320605506
 MonoBehaviour:
   m_ObjectHideFlags: 0

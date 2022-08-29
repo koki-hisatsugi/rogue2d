@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 1082788504057782077}
   - component: {fileID: 1082788504057782073}
   - component: {fileID: 2136429776196830755}
+  - component: {fileID: 7026284964901413534}
   - component: {fileID: 2757338154098319119}
   - component: {fileID: -5833858771454752353}
-  - component: {fileID: -6285427527984905034}
   - component: {fileID: 5471705103200122975}
   - component: {fileID: -55535345674168035}
   - component: {fileID: 636250472864441251}
@@ -168,6 +168,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   isOnExit: 0
+--- !u!114 &7026284964901413534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082788504057782067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d863a56997ec9c040a48d58aa2bd83ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: 
+  _Level: 0
+  _HP: 0
+  _Atk: 0
+  _Def: 0
+  _Exp: 0
+  _HPbar: {fileID: 0}
+  _ActorSprite: {fileID: 0}
+  _Attack1: {fileID: 8300000, guid: b6499e378cba48448b59e2cff211cac0, type: 3}
+  _AudioSource: {fileID: 0}
+  _ActorPosX: 0
+  _ActorPosY: 0
+  _AtkMiss: {fileID: 8300000, guid: ad964e0f11dd7fb45a126896538dd200, type: 3}
+  _HPHeal: {fileID: 8300000, guid: 7c621268e0e425b4fb85f32eedcc420a, type: 3}
+  _ThisActorDir: {fileID: 0}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isAttack: 0
+  ThisAction: 0
+  moveHorizontal: 0
+  moveVatical: 0
+  _Stamina: 0
+  _STbar: {fileID: 0}
+  _PlayerLevelText: {fileID: 0}
+  _STHeal: {fileID: 8300000, guid: f8d99104ba272a748a0ecfc313534d67, type: 3}
+  _LevelUp: {fileID: 8300000, guid: ddc69046172538841b2c235f1cdff7c7, type: 3}
+  _PlayerStatus: {fileID: 11400000, guid: 02ef279e519a55945bc36c9e997dc7cd, type: 2}
 --- !u!114 &2757338154098319119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,46 +239,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisDir: 0
---- !u!114 &-6285427527984905034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082788504057782067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2591270ef3f43824080388c0cdaa8b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Name: 
-  _Level: 0
-  _HP: 0
-  _Atk: 0
-  _Def: 0
-  _Stamina: 0
-  _Exp: 0
-  _HPbar: {fileID: 0}
-  _STbar: {fileID: 0}
-  _PlayerLevelText: {fileID: 0}
-  _ActorSprite: {fileID: 0}
-  _Attack1: {fileID: 0}
-  _AudioSource: {fileID: 0}
-  _ActorPosX: 0
-  _ActorPosY: 0
-  _AtkMiss: {fileID: 0}
-  _STHeal: {fileID: 0}
-  _HPHeal: {fileID: 0}
-  _LevelUp: {fileID: 0}
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  isAttack: 0
-  ThisAction: 0
-  moveHorizontal: 0
-  moveVatical: 0
-  _PlayerStatus: {fileID: 0}
-  _EnemyStatus: {fileID: 0}
 --- !u!114 &5471705103200122975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,7 +264,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: f8b06403a9a1bde40924ba62f9afabfb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1

@@ -4,9 +4,9 @@ public class ItemGetter : MonoBehaviour
 {
     public GameManager gameManager;
     public bool isOnExit;
-    private ActorManager _AM;
+    private PlayerManager _AM;
     void Start(){
-        _AM = GetComponent<ActorManager>();
+        _AM = GetComponent<PlayerManager>();
         // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         isOnExit = false;
     }

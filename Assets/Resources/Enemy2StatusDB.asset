@@ -1,0 +1,619 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b73b48b2e76c24cb1fb5800a75f8cf, type: 3}
+  m_Name: Enemy2StatusDB
+  m_EditorClassIdentifier: 
+  EnemyName: "\u30E0\u30C3\u30B7\u30E5\u3080\u3063\u3057"
+  AutoSettingParam: 1
+  AddAtk: 5
+  AddDef: 1
+  list:
+  - id: 1
+    level: 1
+    maxHp: 13
+    atk: 5
+    def: 2
+    giveExp: 2
+  - id: 2
+    level: 2
+    maxHp: 16
+    atk: 10
+    def: 3
+    giveExp: 4
+  - id: 3
+    level: 3
+    maxHp: 19
+    atk: 15
+    def: 4
+    giveExp: 6
+  - id: 4
+    level: 4
+    maxHp: 22
+    atk: 20
+    def: 5
+    giveExp: 8
+  - id: 5
+    level: 5
+    maxHp: 25
+    atk: 25
+    def: 6
+    giveExp: 10
+  - id: 6
+    level: 6
+    maxHp: 28
+    atk: 30
+    def: 7
+    giveExp: 12
+  - id: 7
+    level: 7
+    maxHp: 31
+    atk: 35
+    def: 8
+    giveExp: 14
+  - id: 8
+    level: 8
+    maxHp: 34
+    atk: 40
+    def: 9
+    giveExp: 16
+  - id: 9
+    level: 9
+    maxHp: 37
+    atk: 45
+    def: 10
+    giveExp: 18
+  - id: 10
+    level: 10
+    maxHp: 40
+    atk: 50
+    def: 11
+    giveExp: 20
+  - id: 11
+    level: 11
+    maxHp: 43
+    atk: 55
+    def: 12
+    giveExp: 22
+  - id: 12
+    level: 12
+    maxHp: 46
+    atk: 60
+    def: 13
+    giveExp: 24
+  - id: 13
+    level: 13
+    maxHp: 49
+    atk: 65
+    def: 14
+    giveExp: 26
+  - id: 14
+    level: 14
+    maxHp: 52
+    atk: 70
+    def: 15
+    giveExp: 28
+  - id: 15
+    level: 15
+    maxHp: 55
+    atk: 75
+    def: 16
+    giveExp: 30
+  - id: 16
+    level: 16
+    maxHp: 58
+    atk: 80
+    def: 17
+    giveExp: 32
+  - id: 17
+    level: 17
+    maxHp: 61
+    atk: 85
+    def: 18
+    giveExp: 34
+  - id: 18
+    level: 18
+    maxHp: 64
+    atk: 90
+    def: 19
+    giveExp: 36
+  - id: 19
+    level: 19
+    maxHp: 67
+    atk: 95
+    def: 20
+    giveExp: 38
+  - id: 20
+    level: 20
+    maxHp: 70
+    atk: 100
+    def: 21
+    giveExp: 40
+  - id: 21
+    level: 21
+    maxHp: 73
+    atk: 105
+    def: 22
+    giveExp: 42
+  - id: 22
+    level: 22
+    maxHp: 76
+    atk: 110
+    def: 23
+    giveExp: 44
+  - id: 23
+    level: 23
+    maxHp: 79
+    atk: 115
+    def: 24
+    giveExp: 46
+  - id: 24
+    level: 24
+    maxHp: 82
+    atk: 120
+    def: 25
+    giveExp: 48
+  - id: 25
+    level: 25
+    maxHp: 85
+    atk: 125
+    def: 26
+    giveExp: 50
+  - id: 26
+    level: 26
+    maxHp: 88
+    atk: 130
+    def: 27
+    giveExp: 52
+  - id: 27
+    level: 27
+    maxHp: 91
+    atk: 135
+    def: 28
+    giveExp: 54
+  - id: 28
+    level: 28
+    maxHp: 94
+    atk: 140
+    def: 29
+    giveExp: 56
+  - id: 29
+    level: 29
+    maxHp: 97
+    atk: 145
+    def: 30
+    giveExp: 58
+  - id: 30
+    level: 30
+    maxHp: 100
+    atk: 150
+    def: 31
+    giveExp: 60
+  - id: 31
+    level: 31
+    maxHp: 103
+    atk: 155
+    def: 32
+    giveExp: 62
+  - id: 32
+    level: 32
+    maxHp: 106
+    atk: 160
+    def: 33
+    giveExp: 64
+  - id: 33
+    level: 33
+    maxHp: 109
+    atk: 165
+    def: 34
+    giveExp: 66
+  - id: 34
+    level: 34
+    maxHp: 112
+    atk: 170
+    def: 35
+    giveExp: 68
+  - id: 35
+    level: 35
+    maxHp: 115
+    atk: 175
+    def: 36
+    giveExp: 70
+  - id: 36
+    level: 36
+    maxHp: 118
+    atk: 180
+    def: 37
+    giveExp: 72
+  - id: 37
+    level: 37
+    maxHp: 121
+    atk: 185
+    def: 38
+    giveExp: 74
+  - id: 38
+    level: 38
+    maxHp: 124
+    atk: 190
+    def: 39
+    giveExp: 76
+  - id: 39
+    level: 39
+    maxHp: 127
+    atk: 195
+    def: 40
+    giveExp: 78
+  - id: 40
+    level: 40
+    maxHp: 130
+    atk: 200
+    def: 41
+    giveExp: 80
+  - id: 41
+    level: 41
+    maxHp: 133
+    atk: 205
+    def: 42
+    giveExp: 82
+  - id: 42
+    level: 42
+    maxHp: 136
+    atk: 210
+    def: 43
+    giveExp: 84
+  - id: 43
+    level: 43
+    maxHp: 139
+    atk: 215
+    def: 44
+    giveExp: 86
+  - id: 44
+    level: 44
+    maxHp: 142
+    atk: 220
+    def: 45
+    giveExp: 88
+  - id: 45
+    level: 45
+    maxHp: 145
+    atk: 225
+    def: 46
+    giveExp: 90
+  - id: 46
+    level: 46
+    maxHp: 148
+    atk: 230
+    def: 47
+    giveExp: 92
+  - id: 47
+    level: 47
+    maxHp: 151
+    atk: 235
+    def: 48
+    giveExp: 94
+  - id: 48
+    level: 48
+    maxHp: 154
+    atk: 240
+    def: 49
+    giveExp: 96
+  - id: 49
+    level: 49
+    maxHp: 157
+    atk: 245
+    def: 50
+    giveExp: 98
+  - id: 50
+    level: 50
+    maxHp: 160
+    atk: 250
+    def: 51
+    giveExp: 100
+  - id: 51
+    level: 51
+    maxHp: 163
+    atk: 255
+    def: 52
+    giveExp: 102
+  - id: 52
+    level: 52
+    maxHp: 166
+    atk: 260
+    def: 53
+    giveExp: 104
+  - id: 53
+    level: 53
+    maxHp: 169
+    atk: 265
+    def: 54
+    giveExp: 106
+  - id: 54
+    level: 54
+    maxHp: 172
+    atk: 270
+    def: 55
+    giveExp: 108
+  - id: 55
+    level: 55
+    maxHp: 175
+    atk: 275
+    def: 56
+    giveExp: 110
+  - id: 56
+    level: 56
+    maxHp: 178
+    atk: 280
+    def: 57
+    giveExp: 112
+  - id: 57
+    level: 57
+    maxHp: 181
+    atk: 285
+    def: 58
+    giveExp: 114
+  - id: 58
+    level: 58
+    maxHp: 184
+    atk: 290
+    def: 59
+    giveExp: 116
+  - id: 59
+    level: 59
+    maxHp: 187
+    atk: 295
+    def: 60
+    giveExp: 118
+  - id: 60
+    level: 60
+    maxHp: 190
+    atk: 300
+    def: 61
+    giveExp: 120
+  - id: 61
+    level: 61
+    maxHp: 193
+    atk: 305
+    def: 62
+    giveExp: 122
+  - id: 62
+    level: 62
+    maxHp: 196
+    atk: 310
+    def: 63
+    giveExp: 124
+  - id: 63
+    level: 63
+    maxHp: 199
+    atk: 315
+    def: 64
+    giveExp: 126
+  - id: 64
+    level: 64
+    maxHp: 202
+    atk: 320
+    def: 65
+    giveExp: 128
+  - id: 65
+    level: 65
+    maxHp: 205
+    atk: 325
+    def: 66
+    giveExp: 130
+  - id: 66
+    level: 66
+    maxHp: 208
+    atk: 330
+    def: 67
+    giveExp: 132
+  - id: 67
+    level: 67
+    maxHp: 211
+    atk: 335
+    def: 68
+    giveExp: 134
+  - id: 68
+    level: 68
+    maxHp: 214
+    atk: 340
+    def: 69
+    giveExp: 136
+  - id: 69
+    level: 69
+    maxHp: 217
+    atk: 345
+    def: 70
+    giveExp: 138
+  - id: 70
+    level: 70
+    maxHp: 220
+    atk: 350
+    def: 71
+    giveExp: 140
+  - id: 71
+    level: 71
+    maxHp: 223
+    atk: 355
+    def: 72
+    giveExp: 142
+  - id: 72
+    level: 72
+    maxHp: 226
+    atk: 360
+    def: 73
+    giveExp: 144
+  - id: 73
+    level: 73
+    maxHp: 229
+    atk: 365
+    def: 74
+    giveExp: 146
+  - id: 74
+    level: 74
+    maxHp: 232
+    atk: 370
+    def: 75
+    giveExp: 148
+  - id: 75
+    level: 75
+    maxHp: 235
+    atk: 375
+    def: 76
+    giveExp: 150
+  - id: 76
+    level: 76
+    maxHp: 238
+    atk: 380
+    def: 77
+    giveExp: 152
+  - id: 77
+    level: 77
+    maxHp: 241
+    atk: 385
+    def: 78
+    giveExp: 154
+  - id: 78
+    level: 78
+    maxHp: 244
+    atk: 390
+    def: 79
+    giveExp: 156
+  - id: 79
+    level: 79
+    maxHp: 247
+    atk: 395
+    def: 80
+    giveExp: 158
+  - id: 80
+    level: 80
+    maxHp: 250
+    atk: 400
+    def: 81
+    giveExp: 160
+  - id: 81
+    level: 81
+    maxHp: 253
+    atk: 405
+    def: 82
+    giveExp: 162
+  - id: 82
+    level: 82
+    maxHp: 256
+    atk: 410
+    def: 83
+    giveExp: 164
+  - id: 83
+    level: 83
+    maxHp: 259
+    atk: 415
+    def: 84
+    giveExp: 166
+  - id: 84
+    level: 84
+    maxHp: 262
+    atk: 420
+    def: 85
+    giveExp: 168
+  - id: 85
+    level: 85
+    maxHp: 265
+    atk: 425
+    def: 86
+    giveExp: 170
+  - id: 86
+    level: 86
+    maxHp: 268
+    atk: 430
+    def: 87
+    giveExp: 172
+  - id: 87
+    level: 87
+    maxHp: 271
+    atk: 435
+    def: 88
+    giveExp: 174
+  - id: 88
+    level: 88
+    maxHp: 274
+    atk: 440
+    def: 89
+    giveExp: 176
+  - id: 89
+    level: 89
+    maxHp: 277
+    atk: 445
+    def: 90
+    giveExp: 178
+  - id: 90
+    level: 90
+    maxHp: 280
+    atk: 450
+    def: 91
+    giveExp: 180
+  - id: 91
+    level: 91
+    maxHp: 283
+    atk: 455
+    def: 92
+    giveExp: 182
+  - id: 92
+    level: 92
+    maxHp: 286
+    atk: 460
+    def: 93
+    giveExp: 184
+  - id: 93
+    level: 93
+    maxHp: 289
+    atk: 465
+    def: 94
+    giveExp: 186
+  - id: 94
+    level: 94
+    maxHp: 292
+    atk: 470
+    def: 95
+    giveExp: 188
+  - id: 95
+    level: 95
+    maxHp: 295
+    atk: 475
+    def: 96
+    giveExp: 190
+  - id: 96
+    level: 96
+    maxHp: 298
+    atk: 480
+    def: 97
+    giveExp: 192
+  - id: 97
+    level: 97
+    maxHp: 301
+    atk: 485
+    def: 98
+    giveExp: 194
+  - id: 98
+    level: 98
+    maxHp: 304
+    atk: 490
+    def: 99
+    giveExp: 196
+  - id: 99
+    level: 99
+    maxHp: 307
+    atk: 495
+    def: 100
+    giveExp: 198
+  - id: 100
+    level: 100
+    maxHp: 310
+    atk: 500
+    def: 101
+    giveExp: 200

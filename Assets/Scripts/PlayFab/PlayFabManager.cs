@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +11,7 @@ public class PlayFabManager : MonoBehaviour
     const string STATISTICS_NAME = "HighScore[hierarchy]";
 
     public int score;
-    public string customId;
+    // public string customId;
     public GameObject Content;
     public GameObject RankText;
     private GameObject MyRankText;
@@ -17,24 +19,36 @@ public class PlayFabManager : MonoBehaviour
     private string _DisplayName;
     public Text UserName;
     public InputField InputUserName;
+    // ランキングを取得するまでの秒数
+    const int RankingBoardGetDelaySpan = 1;
 
     public void Login(){
         PlayFabClientAPI.LoginWithCustomID(
-            new LoginWithCustomIDRequest { CustomId = customId, CreateAccount = true},
+            new LoginWithCustomIDRequest { CustomId = CreateNewId(), CreateAccount = true},
             result => Debug.Log("ログイン成功！"),
             error => Debug.Log("ログイン失敗"));
     }
+    // 一意のIdを生成する
+    string CreateNewId () {
+        return System.Guid.NewGuid().ToString();
+    }
 
-    public void SubmitScoreButton(){
+    public void ButtonMethod(){
+        SubmitScoreButton();
+    }
+
+    async private UniTask SubmitScoreButton(){
         SubmitDisplayName();
         SubmitScore(score);
+        await UniTask.Delay(TimeSpan.FromSeconds(RankingBoardGetDelaySpan));
         RequestLeaderBoard();
     }
 
     void SubmitDisplayName(){
+        _DisplayName = (InputUserName.text).Equals("") ? _DisplayName : InputUserName.text;
         PlayFabClientAPI.UpdateUserTitleDisplayName(
             new UpdateUserTitleDisplayNameRequest{
-                DisplayName = InputUserName.text
+                DisplayName = _DisplayName
             },
             result =>
             {
