@@ -46,16 +46,25 @@ public class GameManager : MonoBehaviour
     // パーティクルレベルアップ
     public GameObject LevelUpParticle;
     private GameObject _LevelUpParticle;
+    // パーティクル回復
+    public GameObject HealParticle;
+    private GameObject _HealParticle;
     // 選択音
     public AudioClip Select1;
     // 決定音
     public AudioClip Decision;
     // 階層の移動音
     public AudioClip ExitSound;
+    // アイテムを拾う音
+    public AudioClip TakeSound;
     // リザルト画面のBGM
     public AudioClip ResultBGM;
     // オーディオソース
     [SerializeField] private AudioSource _AudioSource;
+    // アイテムメニュー
+    [SerializeField] private GameObject _ItemMenu;
+    [SerializeField] private GameObject _ItemListMenu;
+    [SerializeField] private ItemList _ItemList;
     // ランキングパネル
     [SerializeField] private GameObject _RankingPanel;
     [SerializeField] private GameObject _ScoreView;
@@ -74,6 +83,7 @@ public class GameManager : MonoBehaviour
         SelectFase,
         NextStandByFase,
         TestFase,
+        OpenItemMenu,
     }
 
     [SerializeField] private GameState _thisGameState;
@@ -96,7 +106,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Debug.unityLogger.logEnabled = logEnabled;  
+        Debug.unityLogger.logEnabled = logEnabled;
         // DontDestroyOnLoad(gameObject);
         this.gameObject.name = "GameManager";
         this.gameObject.transform.position = new Vector2(0,0);
@@ -139,8 +149,18 @@ public class GameManager : MonoBehaviour
         _LevelUpParticle = Instantiate(LevelUpParticle, new Vector3(0, 0, 0), Quaternion.identity);
         _LevelUpParticle.SetActive(false);
 
+        _HealParticle = Instantiate(HealParticle, new Vector3(0, 0, 0), Quaternion.identity);
+        _HealParticle.SetActive(false);
+
         _AudioSource = GetComponent<AudioSource>();
         _selectbutton = true;
+
+        _ItemMenu = GameObject.Find("ItemMenu");
+        _ItemListMenu = _ItemMenu.transform.Find("ItemListView").gameObject;
+        _ItemList = _ItemListMenu.GetComponent<ItemList>();
+        _ItemMenu.SetActive(false);
+        _Player.GetComponent<ItemGetter>().itemList = _ItemList;
+        _Player.GetComponent<ItemGetter>().gameManager = this;
 
         _RankingPanel = GameObject.Find("RankingPanel");
         _PlayfabManager = _RankingPanel.GetComponent<PlayFabManager>();
@@ -177,6 +197,10 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy(){
         cts.Cancel();
+    }
+
+    public void TikeItemSound(){
+        _AudioSource.PlayOneShot(TakeSound);
     }
 
     // フェーズの管理をして各行動を制限する
@@ -231,6 +255,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.TestFase:           // フロア遷移アニメーション
                     Debug.Log(_thisGameState);
+                    break;
+                case GameState.OpenItemMenu:           // フロア遷移アニメーション
+                    await OpenItemMenu();
                     break;
             }
         }
@@ -358,6 +385,52 @@ public class GameManager : MonoBehaviour
 
     }
     
+    // アイテムメニューを表示している際の処理
+    private async UniTask OpenItemMenu()
+    {
+        if(!_ItemMenu.activeInHierarchy){
+            _ItemMenu.SetActive(true);
+            _ItemList.setInfoText();
+        }
+
+        if(Input.GetKeyDown(KeyCode.UpArrow)){
+            _ItemList.CursorController(ItemList.CursorInput.cursorUP);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow)){
+            _ItemList.CursorController(ItemList.CursorInput.cursorDown);
+        }
+        else if(Input.GetKeyDown(KeyCode.Z))
+        {
+            ItemData exeItem = _ItemList.UseItem();
+            if(exeItem == null) return;
+            if(ItemMasterList.ItemParam.ItemType.Cure.Equals(exeItem.InItemType)){
+                if(ItemMasterList.ItemParam.CureType.Hp.Equals(exeItem.InCureType)){
+                    _PlayerActorManager.HpHelth(exeItem.Value);
+                    _HealParticle.transform.position = new Vector3(_PlayerActorManager.GetSet_ActorPosX, _PlayerActorManager.GetSet_ActorPosY, 0);
+                    _HealParticle.SetActive(false);
+                    _HealParticle.SetActive(true);
+                } else if(ItemMasterList.ItemParam.CureType.Stamina.Equals(exeItem.InCureType)){
+                    _PlayerActorManager.StaminaCharge(exeItem.Value);
+                    _HealParticle.transform.position = new Vector3(_PlayerActorManager.GetSet_ActorPosX, _PlayerActorManager.GetSet_ActorPosY, 0);
+                    _HealParticle.SetActive(false);
+                    _HealParticle.SetActive(true);
+                }
+                _ItemMenu.SetActive(false);
+                _thisGameState = GameState.EnemyOperateFase;
+
+            }else if(ItemMasterList.ItemParam.ItemType.Equip.Equals(exeItem.InItemType)){
+
+            }else{
+
+            }
+        }
+        else if(Input.GetKeyDown(KeyCode.C))
+        {
+            _ItemMenu.SetActive(false);
+            _thisGameState= GameState.InputStay;
+        }
+    }
+    
     private async UniTask GameOver()
     {
         if(Input.GetKeyDown(KeyCode.Z)){
@@ -420,6 +493,10 @@ public class GameManager : MonoBehaviour
             // 入力が有効だった場合のフラグを立てる
             inputTrue = true;
             _PlayerActorManager.ThisAction = ActorManager.ActorAction.isAttack;
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            _thisGameState= GameState.OpenItemMenu;
         }
 
         if (inputTrue)

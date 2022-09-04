@@ -12,10 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ac8139ef3d65842854ce328e144473, type: 3}
   m_Name: ItemMasterList
   m_EditorClassIdentifier: 
-  Item:
-  - ID: 0
-    ItemName: 
-    ItemInfo: 
-    InItemType: 1
-    InEquipType: 1
+  Items:
+  - ID: 1
+    ItemName: "\u56DE\u5FA9\u85ACS"
+    ItemInfo: "HP\u3092{0}\u56DE\u5FA9\u3059\u308B"
+    InItemType: 0
+    InEquipType: 2
+    InCureType: 0
+    Value: 30
+    Prefab: {fileID: 125921245134790734, guid: f13f61e61fb1060428f13cf1a6a8cc2e, type: 3}
+  - ID: 2
+    ItemName: "\u56DE\u5FA9\u85ACM"
+    ItemInfo: "HP\u3092{0}\u56DE\u5FA9\u3059\u308B"
+    InItemType: 0
+    InEquipType: 2
+    InCureType: 0
+    Value: 50
+    Prefab: {fileID: 125921245134790734, guid: f13f61e61fb1060428f13cf1a6a8cc2e, type: 3}
+  - ID: 3
+    ItemName: "\u5143\u6C17\u30C9\u30EA\u30F3\u30AFS"
+    ItemInfo: "\u30B9\u30BF\u30DF\u30CA\u3092{0}\u56DE\u5FA9\u3059\u308B"
+    InItemType: 0
+    InEquipType: 2
     InCureType: 1
+    Value: 20
+    Prefab: {fileID: 125921245134790734, guid: d8d3c4aa9875206448b8a667b058d4bb, type: 3}
+  - ID: 4
+    ItemName: "\u5143\u6C17\u30C9\u30EA\u30F3\u30AFM"
+    ItemInfo: "\u30B9\u30BF\u30DF\u30CA\u3092{0}\u56DE\u5FA9\u3059\u308B"
+    InItemType: 0
+    InEquipType: 2
+    InCureType: 1
+    Value: 40
+    Prefab: {fileID: 125921245134790734, guid: d8d3c4aa9875206448b8a667b058d4bb, type: 3}

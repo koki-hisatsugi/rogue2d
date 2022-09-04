@@ -5,6 +5,8 @@ public class ItemGetter : MonoBehaviour
     public GameManager gameManager;
     public bool isOnExit;
     private PlayerManager _AM;
+
+    public ItemList itemList;
     void Start(){
         _AM = GetComponent<PlayerManager>();
         // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -15,13 +17,27 @@ public class ItemGetter : MonoBehaviour
     {
         if(collision.tag == "Food" || collision.tag == "HPball")
         {
-            collision.gameObject.SetActive(false);
-            _AM.HpHelth(10);
+            if(gameManager != null){
+                gameManager.TikeItemSound();
+            }
+            if(itemList != null){
+                if(itemList.GetItem(collision.gameObject.name)){
+                    collision.gameObject.SetActive(false);
+                }
+            }
+            // _AM.HpHelth(10);
         }
         else if (collision.tag == "Soda" || collision.tag == "STball")
         {
-            collision.gameObject.SetActive(false);
-            _AM.StaminaCharge(20);
+            if(gameManager != null){
+                gameManager.TikeItemSound();
+            }
+            if(itemList != null){
+                if(itemList.GetItem(collision.gameObject.name)){
+                    collision.gameObject.SetActive(false);
+                }
+            }
+            // _AM.StaminaCharge(20);
         }
         else if (collision.tag == "Exit")
         {

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f4aecdd837114d9dccc550039ef72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logEnabled: 0
+  logEnabled: 1
   SpawnTurn: 10
   _SpawnTurnCount: 0
   _Player: {fileID: 0}
@@ -75,11 +75,16 @@ MonoBehaviour:
     type: 3}
   LevelUpParticle: {fileID: 4598847658299055833, guid: 9c1ca27262c0d1c4bae718f3e8ec8deb,
     type: 3}
+  HealParticle: {fileID: 4598847658299055833, guid: ce3f16c8478f8bf4c94bd26242a95c92,
+    type: 3}
   Select1: {fileID: 8300000, guid: 7513fe3bd2685934e9ac78b1ba7a3e7f, type: 3}
   Decision: {fileID: 8300000, guid: c5aad253866c47543bacbbae04f07ee1, type: 3}
   ExitSound: {fileID: 8300000, guid: 5a809391902d3b14396b3ae63b7f6198, type: 3}
+  TakeSound: {fileID: 8300000, guid: 64951edd57804974dba2690b3e5ddf2d, type: 3}
   ResultBGM: {fileID: 8300000, guid: 663601ef8e4d69a40a02eb847362483d, type: 3}
   _AudioSource: {fileID: 0}
+  _ItemListMenu: {fileID: 0}
+  _ItemList: {fileID: 0}
   _RankingPanel: {fileID: 0}
   _ScoreView: {fileID: 0}
   _PlayfabManager: {fileID: 0}
@@ -131,6 +136,7 @@ MonoBehaviour:
   enemyTiles:
   - {fileID: 7115134329973930485, guid: 126c6b94ee45cc349bca915331aef32f, type: 3}
   - {fileID: 7115134329973930485, guid: 5dbea1b4bb767714795f66dbedc8f143, type: 3}
+  ItemMaster: {fileID: 11400000, guid: 64f07b51c06fbfc43bca9d94b4ba2efa, type: 2}
   player: {fileID: 1082788504057782067, guid: d4adc96f02c526447bab3ef6d3e8740b, type: 3}
   enemy: {fileID: 7115134329973930485, guid: 126c6b94ee45cc349bca915331aef32f, type: 3}
   exit: {fileID: 7623424065570510919, guid: 6c2076d8b34c184448ae22fd5ecffae6, type: 3}

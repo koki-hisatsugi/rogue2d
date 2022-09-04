@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] foodTiles;
     public GameObject[] outWallTiles;
     public GameObject[] enemyTiles;
+    public ItemMasterList ItemMaster;
 
     public GameObject player;
 
@@ -116,8 +117,12 @@ public class BoardManager : MonoBehaviour
                     }
                     else if (a2d.Get(i, j).GetSetMapValue == BoardRemote.foodNum)
                     {
-                        tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
-                        Walllist.Add(Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform));
+                        // tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
+                        int listNum = Random.Range(0, ItemMaster.GetItemList().Count);
+                        tileChoice = ItemMaster.GetItemList()[listNum].Prefab;
+                        GameObject tmpFood = Instantiate(tileChoice, new Vector3(i, j, 0), Quaternion.identity, _Field.transform);
+                        tmpFood.name = ItemMaster.GetItemList()[listNum].ID.ToString();
+                        Walllist.Add(tmpFood);
                         // a2d.Get(i, j).GetSetMapValue = 0;
                         // a2d.Get(i, j).GetSetMapOnActor = BoardRemote.foodNum;
                     }
